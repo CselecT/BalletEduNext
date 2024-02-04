@@ -24,7 +24,7 @@ const SchoolPage = async () => {
                 </Table.Header>
                 <Table.Body>
                     {schools.map(school => (
-                        <Table.Row>
+                        <Table.Row key={school.id}>
                             <Table.RowHeaderCell>{school.name}</Table.RowHeaderCell>
                             <Table.Cell><Button><Link href={'/school/' + school.id}>School Details</Link></Button></Table.Cell>
                         </Table.Row>

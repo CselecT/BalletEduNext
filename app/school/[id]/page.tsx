@@ -48,7 +48,7 @@ const SchoolDetail = async ({ params }: Props) => {
                 </Table.Header>
                 <Table.Body>
                     {students.map(student => (
-                        <Table.Row>
+                        <Table.Row key={student.id}>
                             <Table.RowHeaderCell>{student.name}</Table.RowHeaderCell>
                             <Table.RowHeaderCell>{student.surname}</Table.RowHeaderCell>
                         </Table.Row>
@@ -65,7 +65,7 @@ const SchoolDetail = async ({ params }: Props) => {
                 </Table.Header>
                 <Table.Body>
                     {teachers.map(teacher => (
-                        <Table.Row>
+                        <Table.Row key={teacher.id}>
                             <Table.RowHeaderCell>{teacher.name}</Table.RowHeaderCell>
                             <Table.RowHeaderCell>{teacher.surname}</Table.RowHeaderCell>
                         </Table.Row>
