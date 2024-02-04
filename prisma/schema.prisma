@@ -109,7 +109,7 @@ model Student {
 model School {
   id       Int       @id @default(autoincrement())
   name     String
-  location String    @db.Text
+  location String?   @db.Text
   students Student[]
   teachers Teacher[]
 }
