@@ -19,7 +19,7 @@ const SchoolDetail = async ({ params }: Props) => {
     });
 
     return (
-        <div>
+        <div className="h-screen">
             <div className='mb-5'>
 
                 {school && <Table.Root variant='surface'>
@@ -37,41 +37,48 @@ const SchoolDetail = async ({ params }: Props) => {
                     </Table.Body>
                 </Table.Root>}
             </div>
-            {students.length === 0 && <div>No students found</div>}
-            {teachers.length === 0 && <div>No teachers found</div>}
-            {students.length > 0 && <Table.Root variant='surface'>
-                <Table.Header>
-                    <Table.Row>
-                        <Table.ColumnHeaderCell>Student Name</Table.ColumnHeaderCell>
-                        <Table.ColumnHeaderCell>Student Surname</Table.ColumnHeaderCell>
-                    </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                    {students.map(student => (
-                        <Table.Row key={student.id}>
-                            <Table.RowHeaderCell>{student.name}</Table.RowHeaderCell>
-                            <Table.RowHeaderCell>{student.surname}</Table.RowHeaderCell>
+            <div className='mb-5 space-y-4'>
+                {students.length === 0 && <div>No students found </div>}
+                <Button variant="outline"><Link href={'/student/new/' + params.id}>Add Student to School</Link></Button>
+                {students.length > 0 && <Table.Root variant='surface'>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.ColumnHeaderCell>Student Name</Table.ColumnHeaderCell>
+                            <Table.ColumnHeaderCell>Student Surname</Table.ColumnHeaderCell>
                         </Table.Row>
-                    ))}
-                </Table.Body>
-            </Table.Root>
-            }
-            {teachers.length > 0 && <Table.Root variant='surface'>
-                <Table.Header>
-                    <Table.Row>
-                        <Table.ColumnHeaderCell>Teacher Name</Table.ColumnHeaderCell>
-                        <Table.ColumnHeaderCell>Teacher Surname</Table.ColumnHeaderCell>
-                    </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                    {teachers.map(teacher => (
-                        <Table.Row key={teacher.id}>
-                            <Table.RowHeaderCell>{teacher.name}</Table.RowHeaderCell>
-                            <Table.RowHeaderCell>{teacher.surname}</Table.RowHeaderCell>
+                    </Table.Header>
+                    <Table.Body>
+                        {students.map(student => (
+                            <Table.Row key={student.id}>
+                                <Table.RowHeaderCell>{student.name}</Table.RowHeaderCell>
+                                <Table.RowHeaderCell>{student.surname}</Table.RowHeaderCell>
+                            </Table.Row>
+                        ))}
+                    </Table.Body>
+                </Table.Root>
+                }
+            </div>
+            <div className='mb-5 space-y-4'>
+
+                {teachers.length === 0 && <div>No teachers found</div>}
+                <Button variant="outline">Add Teacher to School</Button>
+                {teachers.length > 0 && <Table.Root variant='surface'>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.ColumnHeaderCell>Teacher Name</Table.ColumnHeaderCell>
+                            <Table.ColumnHeaderCell>Teacher Surname</Table.ColumnHeaderCell>
                         </Table.Row>
-                    ))}
-                </Table.Body>
-            </Table.Root>}
+                    </Table.Header>
+                    <Table.Body>
+                        {teachers.map(teacher => (
+                            <Table.Row key={teacher.id}>
+                                <Table.RowHeaderCell>{teacher.name}</Table.RowHeaderCell>
+                                <Table.RowHeaderCell>{teacher.surname}</Table.RowHeaderCell>
+                            </Table.Row>
+                        ))}
+                    </Table.Body>
+                </Table.Root>}
+            </div>
 
         </div>
     )

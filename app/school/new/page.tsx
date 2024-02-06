@@ -22,7 +22,7 @@ const NewSchool = () => {
     const [isSubmitting, setSubmitting] = useState(false);
 
     return (
-        <div className='max-w-xl'>
+        <div className='max-w-xl h-screen'>
             <form className='space-y-3' onSubmit={handleSubmit(async (data) => {
                 try {
                     setSubmitting(true)

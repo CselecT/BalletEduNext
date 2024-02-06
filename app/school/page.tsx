@@ -10,7 +10,7 @@ const SchoolPage = async () => {
     // const [isSubmitting, setSubmitting] = useState(false);
 
     return (
-        <div>
+        <div className="h-screen">
             <div className='mb-5'>
                 <Button><Link href='/school/new'>Add School</Link></Button>
             </div>

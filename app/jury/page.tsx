@@ -2,7 +2,7 @@ import React from 'react'
 
 const JuryPage = () => {
     return (
-        <div>JuryPage
+        <div className="h-screen">JuryPage
 
         </div>
     )
