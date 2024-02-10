@@ -4,7 +4,6 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "@/prisma/client";
 import { compare } from 'bcrypt'
 
-
 const handler = NextAuth({
     adapter: PrismaAdapter(prisma),
     session: {
@@ -50,8 +49,13 @@ const handler = NextAuth({
             }
         })
     ], callbacks: {
-        async session({ session, token, user }) {
-            session.user.role = user.role
+        async jwt({ token, user }) {
+            if (user) token.role = user.role
+            return token
+        },
+        // If you want to use the role in client components
+        async session({ session, token }) {
+            if (session?.user) session.user.role = token.role
             return session
         },
     }

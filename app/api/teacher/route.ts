@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/prisma/client";
-import { createStudentSchema } from "../../validationSchemas";
+import { createTeacherSchema } from "../../validationSchemas";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  const validation = createStudentSchema.safeParse(body);
+  const validation = createTeacherSchema.safeParse(body);
   if (!validation.success)
     return NextResponse.json(validation.error.format(), { status: 400 });
 
-  const newStudent = await prisma.student.create({
+  const newTeacher = await prisma.teacher.create({
     data: {
       name: body.name, surname: body.surname,
       birthDate: new Date(body.birthdate),
@@ -24,5 +24,5 @@ export async function POST(request: NextRequest) {
       school: true
     }
   });
-  return NextResponse.json(newStudent, { status: 201 });
+  return NextResponse.json(newTeacher, { status: 201 });
 }

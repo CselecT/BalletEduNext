@@ -4,15 +4,18 @@ import { Button, Table } from '@radix-ui/themes'
 import Link from 'next/link'
 import prisma from '@/prisma/client';
 import Spinner from '../components/Spinner';
+import { useSession } from 'next-auth/react';
 
 const SchoolPage = async () => {
     const schools = await prisma.school.findMany()
     // const [isSubmitting, setSubmitting] = useState(false);
+    // const { status, data: session } = useSession();
 
     return (
         <div className="h-screen">
+
             <div className='mb-5'>
-                <Button><Link href='/school/new'>Add School</Link></Button>
+                {(<Button><Link href='/school/new'>Add School</Link></Button>)}
             </div>
 
             <Table.Root variant='surface'>
@@ -20,12 +23,14 @@ const SchoolPage = async () => {
                     <Table.Row>
                         <Table.ColumnHeaderCell>School Name</Table.ColumnHeaderCell>
                         <Table.ColumnHeaderCell>Location</Table.ColumnHeaderCell>
+                        <Table.ColumnHeaderCell>Details</Table.ColumnHeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
                     {schools.map(school => (
                         <Table.Row key={school.id}>
                             <Table.RowHeaderCell>{school.name}</Table.RowHeaderCell>
+                            <Table.RowHeaderCell>{school.location}</Table.RowHeaderCell>
                             <Table.Cell><Button><Link href={'/school/' + school.id}>School Details</Link></Button></Table.Cell>
                         </Table.Row>
                     ))}

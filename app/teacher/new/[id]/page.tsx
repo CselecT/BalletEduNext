@@ -6,22 +6,22 @@ import { useForm } from 'react-hook-form'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { createStudentSchema } from '@/app/validationSchemas'
+import { createTeacherSchema } from '@/app/validationSchemas'
 import { z } from 'zod'
 import ErrorMessage from '@/app/components/ErrorMessage'
 import Spinner from '@/app/components/Spinner'
 import Datepicker from "tailwind-datepicker-react"
 
-type StudentFrom = z.infer<typeof createStudentSchema>
+type TeacherForm = z.infer<typeof createTeacherSchema>
 
 interface Props {
     params: { id: number }
 }
 
-const NewStudent = ({ params }: Props) => {
+const NewTeacher = ({ params }: Props) => {
     const router = useRouter();
-    const { register, control, handleSubmit, setValue, formState: { errors } } = useForm<StudentFrom>({
-        resolver: zodResolver(createStudentSchema)
+    const { register, control, handleSubmit, setValue, formState: { errors } } = useForm<TeacherForm>({
+        resolver: zodResolver(createTeacherSchema)
     });
     const [error, setError] = useState('');
     const [dateSelected, setDateSelected] = useState(false);
@@ -49,8 +49,8 @@ const NewStudent = ({ params }: Props) => {
                 try {
                     if (!dateSelected) throw new Error('Date is required!')
                     setSubmitting(true)
-                    await axios.post('/api/student', data);
-                    router.push('/student')
+                    await axios.post('/api/teacher', data);
+                    router.push('/teacher')
                 } catch (error) {
                     setSubmitting(false)
                     setError('Input is not valid!')
@@ -89,10 +89,10 @@ const NewStudent = ({ params }: Props) => {
                 <ErrorMessage>
                     {errors.phone?.message}
                 </ErrorMessage>
-                <Button disabled={isSubmitting}>Add New Student{isSubmitting && <Spinner />}</Button>
+                <Button disabled={isSubmitting}>Add New Teacher{isSubmitting && <Spinner />}</Button>
             </form>
         </div>
     )
 }
 
-export default NewStudent
+export default NewTeacher

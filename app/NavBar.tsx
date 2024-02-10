@@ -28,7 +28,9 @@ const NavBar = () => {
                     })}
                     // className={`${link.href === currentPath ? '' : 'link-accent'}`} 
                     href={link.href}>
-                    {link.label}</Link>)}<DarkModeButton />
+                    {link.label}</Link>)}
+                {session?.user.role === 'ADMIN' && (<Link href='/admin'>Admin</Link>)}
+                <DarkModeButton />
             </ul>
             <Box className='absolute right-10 '>
                 {status === "authenticated" && (
