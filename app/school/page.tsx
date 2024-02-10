@@ -13,10 +13,10 @@ const SchoolPage = async () => {
 
     return (
         <div className="h-screen">
-
+            {/* 
             <div className='mb-5'>
                 {(<Button><Link href='/school/new'>Add School</Link></Button>)}
-            </div>
+            </div> */}
 
             <Table.Root variant='surface'>
                 <Table.Header>

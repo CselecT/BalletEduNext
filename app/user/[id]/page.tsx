@@ -28,7 +28,7 @@ const TeacherDetail = async ({ params }: Props) => {
                         </Table.Row>
                         <Table.Row>
                             <Table.ColumnHeaderCell>Birthdate:</Table.ColumnHeaderCell>
-                            <Table.RowHeaderCell>{teacher.birthDate.toDateString()}</Table.RowHeaderCell>
+                            <Table.RowHeaderCell>{teacher.birthDate.getDate()}</Table.RowHeaderCell>
                         </Table.Row><Table.Row>
                             <Table.ColumnHeaderCell>Email:</Table.ColumnHeaderCell>
                             <Table.RowHeaderCell>{teacher.email}</Table.RowHeaderCell>

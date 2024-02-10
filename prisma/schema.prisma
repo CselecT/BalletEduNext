@@ -5,9 +5,9 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  provider = "postgresql"
+  url      = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  // directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
 model Account {
@@ -40,11 +40,14 @@ model User {
   id            String    @id @default(cuid())
   username      String?   @unique
   name          String?
+  surname       String?
   email         String?   @unique
   emailVerified DateTime?
   password      String
   image         String?
   role          String    @default("user")
+  schoolId      Int?
+  juryId        Int?
   accounts      Account[]
   sessions      Session[]
 }
@@ -59,7 +62,6 @@ model VerificationToken {
 
 enum AuthLevel {
   ADMIN
-  TEACHER
   SCHOOL
   JURY
 }
@@ -79,15 +81,21 @@ enum ExamStatus {
 }
 
 model Exam {
-  id       Int        @id @default(autoincrement())
-  level    ExamLevel
-  markings Float[]
-  evals    String[]
-  status   ExamStatus
-  students Student[]
-  teachers Teacher[]
-  juryId   Int        @map("jury_id")
-  jury     Jury       @relation(fields: [juryId], references: [id], onDelete: Cascade)
+  id        Int        @id @default(autoincrement())
+  level     ExamLevel
+  markings  Float[]
+  evals     String[]
+  examDate  DateTime
+  evalDate  DateTime?
+  status    ExamStatus
+  students  Student[]
+  teacherId Int
+  teacher   Teacher    @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  juryId    Int        @map("jury_id")
+  jury      Jury       @relation(fields: [juryId], references: [id], onDelete: Cascade)
+  schoolId  Int        @map("school_id")
+  school    School     @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  videoLink String?
 }
 
 model Student {
@@ -103,11 +111,13 @@ model Student {
 }
 
 model School {
-  id       Int       @id @default(autoincrement())
-  name     String
-  location String?   @db.Text
-  students Student[]
-  teachers Teacher[]
+  id        Int       @id @default(autoincrement())
+  name      String
+  location  String?   @db.Text
+  students  Student[]
+  teachers  Teacher[]
+  exams     Exam[]
+  accountId String
 }
 
 model Teacher {
@@ -130,4 +140,5 @@ model Jury {
   email     String?  @unique
   phone     String?
   exams     Exam[]
+  accountId String
 }

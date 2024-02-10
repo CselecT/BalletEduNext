@@ -1,56 +1,42 @@
 'use client'
-import { Button, Callout, TextArea, TextField } from '@radix-ui/themes'
-import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
+import { Button, Callout, DropdownMenu, RadioGroup, Select, TextArea, TextField } from '@radix-ui/themes'
+import { CaretDownIcon, ExclamationTriangleIcon } from '@radix-ui/react-icons'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { createStudentSchema } from '@/app/validationSchemas'
+import { createUserSchema } from '@/app/validationSchemas'
 import { z } from 'zod'
 import ErrorMessage from '@/app/components/ErrorMessage'
 import Spinner from '@/app/components/Spinner'
-import Datepicker from "tailwind-datepicker-react"
 
-type StudentFrom = z.infer<typeof createStudentSchema>
+type UserForm = z.infer<typeof createUserSchema>
 
-interface Props {
-    params: { id: number }
-}
 
-const NewStudent = ({ params }: Props) => {
+const NewUser = () => {
     const router = useRouter();
-    const { register, control, handleSubmit, setValue, formState: { errors } } = useForm<StudentFrom>({
-        resolver: zodResolver(createStudentSchema)
+    const { register, control, handleSubmit, setValue, formState: { errors } } = useForm<UserForm>({
+        resolver: zodResolver(createUserSchema)
     });
     const [error, setError] = useState('');
     const [dateSelected, setDateSelected] = useState(false);
     const [isSubmitting, setSubmitting] = useState(false);
 
     useEffect(() => {
-        register('schoolid'); // register the field
-        setValue('schoolid', params.id); // set the value
-    }, [register, setValue, params.id]);
+        register('role'); // register the field
+        setValue('role', 'ADMIN'); // set the value
+    }, [register, setValue]);
 
-    const [show, setShow] = useState(false)
-    const handleDateChange = (selectedDate: Date) => {
-        setDateSelected(true)
-        console.log(selectedDate)
-        register('birthdate'); // register the field
-        setValue('birthdate', selectedDate.toDateString()); // set the value
-    }
-    const handleDateClose = (state: boolean) => {
-        setShow(state)
-    }
 
     return (
-        <div className='max-w-xl h-screen'>
+        <div className='max-w-xxl h-screen'>
             <form className='flex flex-col content-between gap-4' onSubmit={handleSubmit(async (data) => {
                 try {
                     if (!dateSelected) throw new Error('Date is required!')
                     setSubmitting(true)
-                    await axios.post('/api/student', data);
-                    router.push('/student')
+                    await axios.post('/api/user', data);
+                    router.push('/user')
                     router.refresh()
                 } catch (error) {
                     setSubmitting(false)
@@ -71,10 +57,12 @@ const NewStudent = ({ params }: Props) => {
                 <ErrorMessage>
                     {errors.surname?.message}
                 </ErrorMessage>
-                <label>Birthday</label>
-                <Datepicker onChange={handleDateChange} show={show} setShow={handleDateClose} />
+                <label>Username</label>
+                <TextField.Root>
+                    <TextField.Input placeholder='Username' {...register('username')} />
+                </TextField.Root>
                 <ErrorMessage>
-                    {!dateSelected && 'Date is required!'}
+                    {errors.surname?.message}
                 </ErrorMessage>
                 <label>Email</label>
                 <TextField.Root>
@@ -83,17 +71,11 @@ const NewStudent = ({ params }: Props) => {
                 <ErrorMessage>
                     {errors.email?.message}
                 </ErrorMessage>
-                <label>Phone number</label>
-                <TextField.Root>
-                    <TextField.Input placeholder='Phone number' {...register('phone')} />
-                </TextField.Root>
-                <ErrorMessage>
-                    {errors.phone?.message}
-                </ErrorMessage>
-                <Button disabled={isSubmitting}>Add New Student{isSubmitting && <Spinner />}</Button>
+
+                <Button disabled={isSubmitting}>Add New User{isSubmitting && <Spinner />}</Button>
             </form>
         </div>
     )
 }
 
-export default NewStudent
+export default NewUser

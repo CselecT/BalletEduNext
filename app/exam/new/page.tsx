@@ -13,7 +13,7 @@ import Spinner from '@/app/components/Spinner'
 
 type SchoolFrom = z.infer<typeof createSchoolSchema>
 
-const NewSchool = () => {
+const NewExam = () => {
     const router = useRouter();
     const { register, control, handleSubmit, formState: { errors } } = useForm<SchoolFrom>({
         resolver: zodResolver(createSchoolSchema)
@@ -34,40 +34,17 @@ const NewSchool = () => {
                     setError('Input is not valid!')
                 }
             })}>
-                <label>School Name</label>
                 <TextField.Root>
                     <TextField.Input placeholder='School Name' {...register('name')} />
                 </TextField.Root>
                 <ErrorMessage>
                     {errors.name?.message}
                 </ErrorMessage>
-                <label>School Location</label>
                 <TextArea placeholder='School Location' {...register('location')} />
-                <label>Account Username</label>
-                <TextField.Root>
-                    <TextField.Input placeholder='Account Username' {...register('username')} />
-                </TextField.Root>
-                <ErrorMessage>
-                    {errors.username?.message}
-                </ErrorMessage>
-                <label>Account Password</label>
-                <TextField.Root>
-                    <TextField.Input placeholder='Account Password' {...register('password')} />
-                </TextField.Root>
-                <ErrorMessage>
-                    {errors.password?.message}
-                </ErrorMessage>
-                <label>Account Email</label>
-                <TextField.Root>
-                    <TextField.Input placeholder='Account Email' {...register('email')} />
-                </TextField.Root>
-                <ErrorMessage>
-                    {errors.email?.message}
-                </ErrorMessage>
                 <Button disabled={isSubmitting}>Add New School{isSubmitting && <Spinner />}</Button>
             </form>
         </div>
     )
 }
 
-export default NewSchool
+export default NewExam

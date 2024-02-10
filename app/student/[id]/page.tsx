@@ -28,7 +28,7 @@ const StudentDetail = async ({ params }: Props) => {
                         </Table.Row>
                         <Table.Row>
                             <Table.ColumnHeaderCell>Birthdate:</Table.ColumnHeaderCell>
-                            <Table.RowHeaderCell>{student.birthDate.getDate()}</Table.RowHeaderCell>
+                            <Table.RowHeaderCell>{student.birthDate.toDateString()}</Table.RowHeaderCell>
                         </Table.Row><Table.Row>
                             <Table.ColumnHeaderCell>Email:</Table.ColumnHeaderCell>
                             <Table.RowHeaderCell>{student.email}</Table.RowHeaderCell>

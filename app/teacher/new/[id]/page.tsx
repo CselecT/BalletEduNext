@@ -45,12 +45,14 @@ const NewTeacher = ({ params }: Props) => {
 
     return (
         <div className='max-w-xl h-screen'>
-            <form className='space-y-3' onSubmit={handleSubmit(async (data) => {
+            <form className='flex flex-col content-between gap-4' onSubmit={handleSubmit(async (data) => {
                 try {
                     if (!dateSelected) throw new Error('Date is required!')
                     setSubmitting(true)
                     await axios.post('/api/teacher', data);
                     router.push('/teacher')
+                    router.refresh()
+
                 } catch (error) {
                     setSubmitting(false)
                     setError('Input is not valid!')

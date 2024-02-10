@@ -1,37 +1,27 @@
 'use client'
 import { Button, Callout, TextArea, TextField } from '@radix-ui/themes'
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { createStudentSchema } from '@/app/validationSchemas'
+import { createJurySchema } from '@/app/validationSchemas'
 import { z } from 'zod'
 import ErrorMessage from '@/app/components/ErrorMessage'
 import Spinner from '@/app/components/Spinner'
 import Datepicker from "tailwind-datepicker-react"
 
-type StudentFrom = z.infer<typeof createStudentSchema>
+type JuryForm = z.infer<typeof createJurySchema>
 
-interface Props {
-    params: { id: number }
-}
-
-const NewStudent = ({ params }: Props) => {
+const NewJury = () => {
     const router = useRouter();
-    const { register, control, handleSubmit, setValue, formState: { errors } } = useForm<StudentFrom>({
-        resolver: zodResolver(createStudentSchema)
+    const { register, control, handleSubmit, setValue, formState: { errors } } = useForm<JuryForm>({
+        resolver: zodResolver(createJurySchema)
     });
     const [error, setError] = useState('');
     const [dateSelected, setDateSelected] = useState(false);
     const [isSubmitting, setSubmitting] = useState(false);
-
-    useEffect(() => {
-        register('schoolid'); // register the field
-        setValue('schoolid', params.id); // set the value
-    }, [register, setValue, params.id]);
-
     const [show, setShow] = useState(false)
     const handleDateChange = (selectedDate: Date) => {
         setDateSelected(true)
@@ -42,16 +32,14 @@ const NewStudent = ({ params }: Props) => {
     const handleDateClose = (state: boolean) => {
         setShow(state)
     }
-
     return (
         <div className='max-w-xl h-screen'>
             <form className='flex flex-col content-between gap-4' onSubmit={handleSubmit(async (data) => {
                 try {
                     if (!dateSelected) throw new Error('Date is required!')
                     setSubmitting(true)
-                    await axios.post('/api/student', data);
-                    router.push('/student')
-                    router.refresh()
+                    await axios.post('/api/jury', data);
+                    router.push('/jury')
                 } catch (error) {
                     setSubmitting(false)
                     setError('Input is not valid!')
@@ -90,10 +78,24 @@ const NewStudent = ({ params }: Props) => {
                 <ErrorMessage>
                     {errors.phone?.message}
                 </ErrorMessage>
-                <Button disabled={isSubmitting}>Add New Student{isSubmitting && <Spinner />}</Button>
+                <label>Username</label>
+                <TextField.Root>
+                    <TextField.Input placeholder='Account Username' {...register('username')} />
+                </TextField.Root>
+                <ErrorMessage>
+                    {errors.username?.message}
+                </ErrorMessage>
+                <label>Account Password</label>
+                <TextField.Root>
+                    <TextField.Input placeholder='Account Password' {...register('password')} />
+                </TextField.Root>
+                <ErrorMessage>
+                    {errors.password?.message}
+                </ErrorMessage>
+                <Button disabled={isSubmitting}>Add New Jury{isSubmitting && <Spinner />}</Button>
             </form>
         </div>
     )
 }
 
-export default NewStudent
+export default NewJury
