@@ -1,27 +1,38 @@
 'use client'
-import { Button, Callout, TextArea, TextField } from '@radix-ui/themes'
-import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
-import React, { useState } from 'react'
+import { Button, Callout, Dialog, Flex, Grid, Inset, Select, Switch, Table, TextArea, TextField } from '@radix-ui/themes'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
-import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { createJurySchema } from '@/app/validationSchemas'
+import { createTeacherSchema } from '@/app/validationSchemas'
 import { z } from 'zod'
 import ErrorMessage from '@/app/components/ErrorMessage'
 import Spinner from '@/app/components/Spinner'
 import Datepicker from "tailwind-datepicker-react"
+import { toast } from 'react-hot-toast';
+import { useRouter } from 'next/navigation'
 
-type JuryForm = z.infer<typeof createJurySchema>
+type TeacherForm = z.infer<typeof createTeacherSchema>
 
-const NewJury = () => {
+interface Props {
+    params: { schoolId: string }
+}
+
+const NewTeacher = ({ params }: Props) => {
+
     const router = useRouter();
-    const { register, control, handleSubmit, setValue, formState: { errors } } = useForm<JuryForm>({
-        resolver: zodResolver(createJurySchema)
+    const { register, control, handleSubmit, setValue, formState: { errors } } = useForm<TeacherForm>({
+        resolver: zodResolver(createTeacherSchema)
     });
     const [error, setError] = useState('');
     const [dateSelected, setDateSelected] = useState(false);
     const [isSubmitting, setSubmitting] = useState(false);
+
+    useEffect(() => {
+        register('schoolid'); // register the field
+        setValue('schoolid', parseInt(params.schoolId)); // set the value
+    }, [register, setValue, params.schoolId]);
+
     const [show, setShow] = useState(false)
     const handleDateChange = (selectedDate: Date) => {
         setDateSelected(true)
@@ -32,15 +43,20 @@ const NewJury = () => {
     const handleDateClose = (state: boolean) => {
         setShow(state)
     }
+
     return (
         <div className='max-w-xl h-full'>
             <form className='flex flex-col content-between gap-4' onSubmit={handleSubmit(async (data) => {
                 try {
                     if (!dateSelected) throw new Error('Date is required!')
                     setSubmitting(true)
-                    await axios.post('/api/jury', data);
-                    router.push('/jury')
+                    await axios.post('/api/teacher', data);
+                    toast.success("Teacher has been registered successfully.", { duration: 3000, });
+                    router.refresh()
+                    setSubmitting(false)
+
                 } catch (error) {
+                    toast.error("Something went wrong!", { duration: 3000, });
                     setSubmitting(false)
                     setError('Input is not valid!')
                 }
@@ -78,24 +94,13 @@ const NewJury = () => {
                 <ErrorMessage>
                     {errors.phone?.message}
                 </ErrorMessage>
-                <label>Username</label>
-                <TextField.Root>
-                    <TextField.Input placeholder='Account Username' {...register('username')} />
-                </TextField.Root>
-                <ErrorMessage>
-                    {errors.username?.message}
-                </ErrorMessage>
-                <label>Account Password</label>
-                <TextField.Root>
-                    <TextField.Input placeholder='Account Password' {...register('password')} />
-                </TextField.Root>
-                <ErrorMessage>
-                    {errors.password?.message}
-                </ErrorMessage>
-                <Button disabled={isSubmitting}>Add New Jury{isSubmitting && <Spinner />}</Button>
+                <Flex gap="3" justify="between">
+                    <Button disabled={isSubmitting}>Add New Teacher{isSubmitting && <Spinner />}</Button>
+                </Flex>
             </form>
         </div>
     )
+
 }
 
-export default NewJury
+export default NewTeacher

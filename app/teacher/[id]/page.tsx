@@ -12,7 +12,7 @@ const TeacherDetail = async ({ params }: Props) => {
     });
 
     return (
-        <div className="h-screen">
+        <div className="h-full">
             <div className='mb-5'>
 
                 {teacher && <Table.Root variant='surface'>

@@ -22,7 +22,7 @@ const NewSchool = () => {
     const [isSubmitting, setSubmitting] = useState(false);
 
     return (
-        <div className='max-w-xl h-screen'>
+        <div className='max-w-xl h-full'>
             <form className='flex flex-col content-between gap-4' onSubmit={handleSubmit(async (data) => {
                 try {
                     setSubmitting(true)

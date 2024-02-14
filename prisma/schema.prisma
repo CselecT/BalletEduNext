@@ -67,10 +67,10 @@ enum AuthLevel {
 }
 
 enum ExamLevel {
-  FIRST
-  SECOND
-  THIRD
-  FOURTH
+  PREP_1
+  PREP_2
+  PREP_3
+  PREP_4
 }
 
 enum ExamStatus {
@@ -80,34 +80,45 @@ enum ExamStatus {
   COMPLETED
 }
 
+model ExamStudents {
+  id            Int     @id @default(autoincrement())
+  examId        Int     @map("exam_id")
+  exam          Exam    @relation(fields: [examId], references: [id])
+  studentId     Int     @map("student_id")
+  student       Student @relation(fields: [studentId], references: [id])
+  marking       Float?
+  eval          String?
+  evalTranslate String?
+}
+
 model Exam {
-  id        Int        @id @default(autoincrement())
+  id        Int            @id @default(autoincrement())
   level     ExamLevel
   markings  Float[]
   evals     String[]
   examDate  DateTime
   evalDate  DateTime?
   status    ExamStatus
-  students  Student[]
   teacherId Int
-  teacher   Teacher    @relation(fields: [teacherId], references: [id], onDelete: Cascade)
-  juryId    Int        @map("jury_id")
-  jury      Jury       @relation(fields: [juryId], references: [id], onDelete: Cascade)
-  schoolId  Int        @map("school_id")
-  school    School     @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  teacher   Teacher        @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  juryId    Int            @map("jury_id")
+  jury      Jury           @relation(fields: [juryId], references: [id], onDelete: Cascade)
+  schoolId  Int            @map("school_id")
+  school    School         @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   videoLink String?
+  students  ExamStudents[]
 }
 
 model Student {
-  id        Int      @id @default(autoincrement())
+  id        Int            @id @default(autoincrement())
   name      String
   surname   String
   birthDate DateTime
-  email     String?  @unique
+  email     String?        @unique
   phone     String?
-  exams     Exam[]
-  schoolId  Int      @map("school_id")
-  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  schoolId  Int            @map("school_id")
+  school    School         @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  exams     ExamStudents[]
 }
 
 model School {

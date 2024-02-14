@@ -2,7 +2,7 @@ import React from 'react'
 
 const StudentPage = () => {
     return (
-        <div className="h-screen">StudentPage
+        <div className="h-full">StudentPage
 
         </div>
     )

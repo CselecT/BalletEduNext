@@ -5,9 +5,8 @@ import prisma from '@/prisma/client';
 
 const JuryPage = async () => {
     const juries = await prisma.jury.findMany()
-
     return (
-        <div className="h-screen">
+        <div className="h-full">
             <Table.Root variant='surface'>
                 <Table.Header>
                     <Table.Row>

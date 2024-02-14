@@ -11,7 +11,7 @@ const handler = NextAuth({
     },
     providers: [
         CredentialsProvider({
-            name: 'Sign in',
+            name: 'Credentials',
             credentials: {
                 username: {
                     label: 'User Name',
@@ -44,18 +44,28 @@ const handler = NextAuth({
                     email: user.email,
                     name: user.name,
                     role: user.role ?? 'user',
-                    randomKey: 'Hey cool'
+                    randomKey: 'Hey cool',
+                    schoolId: user.schoolId,
+                    juryId: user.juryId
                 }
             }
         })
     ], callbacks: {
         async jwt({ token, user }) {
-            if (user) token.role = user.role
+            if (user) {
+                token.role = user.role
+                token.schoolId = user.schoolId
+                token.juryId = user.juryId
+            }
             return token
         },
         // If you want to use the role in client components
         async session({ session, token }) {
-            if (session?.user) session.user.role = token.role
+            if (session?.user) {
+                session.user.role = token.role
+                session.user.schoolId = token.schoolId
+                session.user.juryId = token.juryId
+            }
             return session
         },
     }

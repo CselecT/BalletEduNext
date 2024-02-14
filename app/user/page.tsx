@@ -10,7 +10,7 @@ const UserPage = async () => {
     const users = await prisma.user.findMany()
 
     return (
-        <div className="h-screen">
+        <div className="h-full">
 
             <div className='mb-5'>
                 {(<Button><Link href='/user/new'>Add User</Link></Button>)}

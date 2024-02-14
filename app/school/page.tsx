@@ -12,7 +12,7 @@ const SchoolPage = async () => {
     // const { status, data: session } = useSession();
 
     return (
-        <div className="h-screen">
+        <div className="h-full">
             {/* 
             <div className='mb-5'>
                 {(<Button><Link href='/school/new'>Add School</Link></Button>)}

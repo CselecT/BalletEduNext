@@ -8,6 +8,9 @@ import { Container, Theme, ThemePanel } from "@radix-ui/themes";
 import AuthProvider from "./auth/Provider";
 import { ThemeProvider } from 'next-themes'
 import { Providers } from './components/providers'
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { Toaster } from 'react-hot-toast'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', })
 
@@ -28,8 +31,11 @@ export default function RootLayout({
           <Providers>
             <Theme accentColor="violet">
               <NavBar />
-              <main className="p-5">
-                <Container>{children}</Container>
+              <Toaster position='top-right' />
+              <main className="p-5 min-h-screen">
+                <Container>
+                  {children}
+                </Container>
               </main>
             </Theme>
           </Providers>

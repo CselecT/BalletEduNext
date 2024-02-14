@@ -30,7 +30,7 @@ const NewUser = () => {
 
 
     return (
-        <div className='max-w-xxl h-screen'>
+        <div className='max-w-xxl h-full'>
             <form className='flex flex-col content-between gap-4' onSubmit={handleSubmit(async (data) => {
                 try {
                     if (!dateSelected) throw new Error('Date is required!')
