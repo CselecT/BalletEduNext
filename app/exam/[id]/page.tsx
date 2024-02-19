@@ -1,12 +1,14 @@
 import React from 'react'
 import prisma from '@/prisma/client';
-import { Button, Link, Table } from '@radix-ui/themes';
+import { Button, Flex, Link, Table } from '@radix-ui/themes';
+import DeleteExamButton from '../_components/DeleteExamButton';
 
 interface Props {
     params: { id: string }
 }
 
 const ExamDetail = async ({ params }: Props) => {
+
     const exam = await prisma.exam.findUnique({
         where: { id: parseInt(params.id) }
     });
@@ -59,6 +61,10 @@ const ExamDetail = async ({ params }: Props) => {
                             <Table.ColumnHeaderCell>Jury:</Table.ColumnHeaderCell>
                             {jury && <Table.RowHeaderCell>{jury.name + ' ' + jury.surname}</Table.RowHeaderCell>}
                         </Table.Row>
+                        <Table.Row>
+                            <Table.ColumnHeaderCell>Video Link:</Table.ColumnHeaderCell>
+                            {exam && <Table.RowHeaderCell>{exam.videoLink}</Table.RowHeaderCell>}
+                        </Table.Row>
                     </Table.Body>
                 </Table.Root>}
             <Table.Root variant='surface'>
@@ -84,6 +90,9 @@ const ExamDetail = async ({ params }: Props) => {
                     ))}
                 </Table.Body>
             </Table.Root>
+            <Flex gap="3" justify="end">
+                <DeleteExamButton examId={exam.id} />
+            </Flex>
         </div>
     )
 }

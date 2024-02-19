@@ -81,21 +81,21 @@ enum ExamStatus {
 }
 
 model ExamStudents {
-  id            Int     @id @default(autoincrement())
-  examId        Int     @map("exam_id")
-  exam          Exam    @relation(fields: [examId], references: [id])
-  studentId     Int     @map("student_id")
-  student       Student @relation(fields: [studentId], references: [id])
+  id            Int       @id @default(autoincrement())
+  examId        Int       @map("exam_id")
+  exam          Exam      @relation(fields: [examId], references: [id], onDelete: Cascade)
+  studentId     Int       @map("student_id")
+  student       Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
   marking       Float?
-  eval          String?
-  evalTranslate String?
+  eval          String?   @db.Text
+  evalTranslate String?   @db.Text
+  evalDate      DateTime? @default(now())
+  confirmDate   DateTime?
 }
 
 model Exam {
   id        Int            @id @default(autoincrement())
   level     ExamLevel
-  markings  Float[]
-  evals     String[]
   examDate  DateTime
   evalDate  DateTime?
   status    ExamStatus
@@ -107,6 +107,7 @@ model Exam {
   school    School         @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   videoLink String?
   students  ExamStudents[]
+  examEval  String?        @db.Text
 }
 
 model Student {

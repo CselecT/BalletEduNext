@@ -1,7 +1,7 @@
 import React from 'react'
 import prisma from '@/prisma/client';
 import { Button, Link, Table } from '@radix-ui/themes';
-import SchoolDetail from '@/app/components/SchoolDetail';
+import SchoolDetail from '@/app/school/_components/SchoolDetail';
 interface Props {
     params: { id: string }
 }

@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import prisma from '@/prisma/client';
 import { Avatar, Box, Button, Card, Dialog, Flex, Inset, Link, Table } from '@radix-ui/themes';
 import { useSession } from 'next-auth/react';
-import NewExam from './NewExam';
-import NewStudentDialog from './NewStudentDialog';
-import NewTeacherDialog from './NewTeacherDialog';
+import NewExam from '../../exam/_components/NewExam';
+import NewStudentDialog from '../../student/_components/NewStudentDialog';
+import NewTeacherDialog from '../../teacher/_components/NewTeacherDialog';
+import { Exam, Jury, School, Student, Teacher } from '@prisma/client';
 
 interface Props {
     params: { id: string }
@@ -13,9 +14,9 @@ interface Props {
 const SchoolDetail = async ({ params }: Props) => {
 
     const schoolId = params.id;
-    const school = await prisma.school.findUnique({
-        where: { id: parseInt(params.id) }
-    });
+
+    const school = await prisma.school.findUnique({ where: { id: parseInt(params.id) } });
+
     const students = await prisma.student.findMany({
         where: { schoolId: parseInt(params.id) }
     });
@@ -29,6 +30,7 @@ const SchoolDetail = async ({ params }: Props) => {
     });
 
     const juries = await prisma.jury.findMany();
+
 
     return (
         <div className=" flex flex-col content-between gap-4">
@@ -55,10 +57,10 @@ const SchoolDetail = async ({ params }: Props) => {
             </div>
 
             <div className='mb-5 space-y-4'>
-                {students.length === 0 && <div>No students found </div>}
+                {students?.length === 0 && <div>No students found </div>}
                 <NewStudentDialog params={{ schoolId }} />
 
-                {students.length > 0 && <Table.Root variant='surface'>
+                {students?.length && students.length > 0 && <Table.Root variant='surface'>
                     <Table.Header>
                         <Table.Row>
                             <Table.ColumnHeaderCell>Student Name</Table.ColumnHeaderCell>
@@ -82,10 +84,10 @@ const SchoolDetail = async ({ params }: Props) => {
             </div>
             <div className='mb-5 space-y-4'>
 
-                {teachers.length === 0 && <div>No teachers found</div>}
+                {teachers?.length === 0 && <div>No teachers found</div>}
                 <NewTeacherDialog params={{ schoolId }} />
 
-                {teachers.length > 0 && <Table.Root variant='surface'>
+                {teachers?.length && teachers.length > 0 && <Table.Root variant='surface'>
                     <Table.Header>
                         <Table.Row>
                             <Table.ColumnHeaderCell>Teacher Name</Table.ColumnHeaderCell>
@@ -106,9 +108,9 @@ const SchoolDetail = async ({ params }: Props) => {
                     </Table.Body>
                 </Table.Root>}
             </div>
-            {exams.length === 0 && <div>No exams found</div>}
-            <NewExam params={{ schoolId, students, teachers, juries }} />
-            {exams.length > 0 && <Table.Root variant='surface'>
+            {exams?.length === 0 && <div>No exams found</div>}
+            {students && teachers && juries && exams && <NewExam params={{ schoolId, students, teachers, juries }} />}
+            {exams?.length && exams.length > 0 && <Table.Root variant='surface'>
                 <Table.Header>
                     <Table.Row>
                         <Table.ColumnHeaderCell>Exam Date</Table.ColumnHeaderCell>

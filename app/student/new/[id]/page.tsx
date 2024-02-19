@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import NewStudent from '@/app/components/NewStudent'
+import NewStudent from '@/app/student/_components/NewStudent'
 
 interface Props {
     params: { id: string }

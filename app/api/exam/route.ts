@@ -10,12 +10,14 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(validation.error.format(), { status: 400 });
   console.log(body)
 
+  const status = body.videolink ? ExamStatus.TO_BE_EVALUATED : ExamStatus.ONGOING;
+
   const newExam = await prisma.exam.create({
     data: {
       videoLink: body.videolink,
       level: body.level,
       examDate: new Date(body.date),
-      status: ExamStatus.ONGOING,
+      status: status,
       teacher: {
         connect: { id: body.teacherid }
       },

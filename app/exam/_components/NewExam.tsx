@@ -21,7 +21,7 @@ import dayjs, { Dayjs } from 'dayjs';
 type ExamForm = z.infer<typeof createExamSchema>
 
 interface Props {
-    params: { schoolId: string, students: Array<Student>, teachers: Array<Teacher>, juries: Array<Jury> }
+    params: { schoolId: string, students: Array<Student> | null, teachers: Array<Teacher> | null, juries: Array<Jury> | null }
 }
 
 const NewExam = ({ params }: Props) => {
@@ -113,14 +113,11 @@ const NewExam = ({ params }: Props) => {
                                     setError('Input is not valid!')
                                 }
                             })}>
-
-
-
                                 <label>Select the Jury</label>
                                 <Select.Root onValueChange={(str) => { handleJurySelect(Number(str)) }}>
                                     <Select.Trigger placeholder="Select a jury" />
                                     <Select.Content>
-                                        {params.juries.map(jury => (
+                                        {params.juries && params.juries.map(jury => (
                                             <Select.Item key={jury.id} value={jury.id + ''}>{jury.name + ' ' + jury.surname}</Select.Item>
 
                                         ))}
@@ -133,7 +130,7 @@ const NewExam = ({ params }: Props) => {
                                 <Select.Root onValueChange={(str) => { handleTeacherSelect(Number(str)) }}>
                                     <Select.Trigger placeholder="Select a teacher" />
                                     <Select.Content>
-                                        {params.teachers.map(teacher => (
+                                        {params.teachers && params.teachers.map(teacher => (
                                             <Select.Item key={teacher.id} value={teacher.id + ''}>{teacher.name + ' ' + teacher.surname}</Select.Item>
 
                                         ))}
@@ -164,7 +161,7 @@ const NewExam = ({ params }: Props) => {
                                         </Table.Row>
                                     </Table.Header>
                                     <Table.Body>
-                                        {params.students.map(student => (
+                                        {params.students && params.students.map(student => (
                                             <Table.Row key={student.id}>
                                                 <Table.RowHeaderCell>{student.name + ' ' + student.surname}</Table.RowHeaderCell>
                                                 <Table.RowHeaderCell> {<Switch onCheckedChange={(event) => { handleToggle(student.id, event) }} />}</Table.RowHeaderCell>
