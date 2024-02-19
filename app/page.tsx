@@ -11,6 +11,10 @@ export default function Home() {
       router.push('/school/' + session?.user.schoolId);
       router.refresh();
     }
+    else if (status === "authenticated" && session && session.user.role === "JURY" && session?.user.juryId !== null) {
+      router.push('/jury/' + session?.user.juryId);
+      router.refresh();
+    }
     else if (status === "authenticated" && session && session.user.role === "ADMIN") {
       router.push('/admin');
       router.refresh();
