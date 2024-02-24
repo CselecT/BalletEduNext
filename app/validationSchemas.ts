@@ -103,15 +103,24 @@ export const createUserSchema = z.object({
 });
 
 export const patchPasswordSchema = z.object({
-  password: z.string().min(1, 'Old Password is required.').max(191),
+  password: z.string().max(191).optional(),
   newPassword: z.string().min(1, 'New Password is required.').max(191),
   confirmPassword: z.string().min(1, 'Confirmation is required.').max(191),
+  ignorePassword: z.boolean().optional(),
 }).refine(
   (values) => {
     return values.newPassword === values.confirmPassword;
   },
   {
     message: "Passwords must match!",
+    path: ["confirmPassword"],
+  }
+).refine(
+  (values) => {
+    return values.ignorePassword || values.password;
+  },
+  {
+    message: "Old Password is required!",
     path: ["confirmPassword"],
   }
 );

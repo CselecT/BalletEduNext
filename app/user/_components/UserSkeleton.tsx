@@ -32,7 +32,7 @@ const UserSkeleton = ({ params }: Props) => {
                     </Table.Row>}
                     {params.birthDate && <Table.Row>
                         <Table.ColumnHeaderCell>Birthday:</Table.ColumnHeaderCell>
-                        <Table.RowHeaderCell>{params.birthDate.getDate()}</Table.RowHeaderCell>
+                        <Table.RowHeaderCell>{params.birthDate.toDateString()}</Table.RowHeaderCell>
                     </Table.Row>}
                     <Table.Row>
                         <Table.ColumnHeaderCell>Username:</Table.ColumnHeaderCell>

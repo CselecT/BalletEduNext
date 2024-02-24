@@ -21,14 +21,13 @@ export async function PATCH(
         });
 
     const user = await prisma.user.findUnique({
-        where: { id: body.id },
+        where: { id: params.id },
     });
     if (!user)
         return NextResponse.json(
             { error: "Invalid user." },
             { status: 400 }
         );
-    const password = await hash(body.password, 12)
 
     if (body.role === 'JURY' && user.juryId) {
         const jury = await prisma.jury.update({
@@ -58,7 +57,6 @@ export async function PATCH(
             name: body.name,
             surname: body.surname,
             username: body.username,
-            password: password,
             email: body.email,
         },
     });

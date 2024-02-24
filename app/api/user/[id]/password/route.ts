@@ -28,17 +28,20 @@ export async function PATCH(
             { status: 400 }
         );
 
-    const isPasswordValid = await compare(
-        body.password,
-        user.password
-    )
+    if (!body.ignorePassword) {
+        const isPasswordValid = await compare(
+            body.password,
+            user.password
+        )
 
-    if (!isPasswordValid) {
-        return NextResponse.json(
-            { error: "Incorrect Password." },
-            { status: 401 }
-        );
+        if (!isPasswordValid) {
+            return NextResponse.json(
+                { error: "Incorrect Password." },
+                { status: 401 }
+            );
+        }
     }
+
     const newPassword = await hash(body.newPassword, 12)
 
     const updatedUser = await prisma.user.update({

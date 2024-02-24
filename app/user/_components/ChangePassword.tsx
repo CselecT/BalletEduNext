@@ -6,7 +6,7 @@ import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { patchPasswordSchema } from '@/app/validationSchemas'
-import { z } from 'zod'
+import { set, z } from 'zod'
 import ErrorMessage from '@/app/components/ErrorMessage'
 import Spinner from '@/app/components/Spinner'
 import { LocalizationProvider, StaticDateTimePicker } from '@mui/x-date-pickers'
@@ -34,6 +34,13 @@ const ChangePassword = ({ params }: Props) => {
     if (status !== "authenticated" || !session || (session.user.id !== params.userId && session.user.role !== 'ADMIN'))
         return (<div></div>)
 
+    useEffect(() => {
+        if (session.user.role === 'ADMIN') {
+            register('ignorePassword');
+            setValue('ignorePassword', true);
+        }
+    }, [register, setValue]);
+
     return (
 
         <div className='max-w-l h-full'>
@@ -58,10 +65,10 @@ const ChangePassword = ({ params }: Props) => {
                                 setError('Input is not valid!')
                             }
                         })}>
-                            <label>Old Password</label>
-                            <TextField.Root>
+                            {session.user.role !== 'ADMIN' && <TextField.Root>
+                                <label>Old Password</label>
                                 <TextField.Input placeholder='Old Password' {...register('password')} />
-                            </TextField.Root>
+                            </TextField.Root>}
                             <ErrorMessage>
                                 {errors.password?.message}
                             </ErrorMessage>

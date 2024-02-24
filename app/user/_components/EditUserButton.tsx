@@ -42,6 +42,11 @@ const EditUserButton = ({ params }: Props) => {
     useEffect(() => {
         register('role'); // register the field
         setValue('role', params.user.role); // set the value
+        if (params.user.role === 'JURY' && params.data && 'birthDate' in params.data) {
+            register('birthdate');
+            setValue('birthdate', params.data?.birthDate.toDateString());
+        }
+
     }, [register, setValue, params.user.role]);
     if (status !== "authenticated" || !session || session.user.role !== 'ADMIN')
         return (<div></div>)
@@ -60,7 +65,7 @@ const EditUserButton = ({ params }: Props) => {
                             <form className='max-w-m flex flex-col content-between gap-4' onSubmit={handleSubmit(async (data) => {
                                 try {
                                     setSubmitting(true)
-                                    const result = await axios.post('/api/user/' + params.user.id, data);
+                                    const result = await axios.patch('/api/user/' + params.user.id, data);
                                     toast.success("User has been edited successfully.", { duration: 3000, });
                                     router.refresh()
                                     setSubmitting(false)
