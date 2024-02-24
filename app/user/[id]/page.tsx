@@ -1,46 +1,37 @@
 import React from 'react'
 import prisma from '@/prisma/client';
 import { Button, Link, Table } from '@radix-ui/themes';
+import UserDetail from '../_components/UserDetail';
 
 interface Props {
     params: { id: string }
 }
 
-const TeacherDetail = async ({ params }: Props) => {
-    const teacher = await prisma.teacher.findUnique({
-        where: { id: parseInt(params.id) }
+const UserDetailPage = async ({ params }: Props) => {
+    const user = await prisma.user.findUnique({
+        where: { id: params.id }
     });
+    let data = null;
+
+    if (!user) return (<div>User not found</div>);
+
+    if (user.role == 'SCHOOL') {
+        data = await prisma.school.findFirst({
+            where: { accountId: user.id }
+        });
+    } else if (user.role == 'JURY') {
+        data = await prisma.jury.findFirst({
+            where: { accountId: user.id }
+        });
+    }
 
     return (
         <div className="h-full">
             <div className='mb-5'>
-
-                {teacher && <Table.Root variant='surface'>
-
-                    <Table.Body>
-                        <Table.Row>
-                            <Table.ColumnHeaderCell>Name:</Table.ColumnHeaderCell>
-                            <Table.RowHeaderCell>{teacher.name}</Table.RowHeaderCell>
-                        </Table.Row>
-                        <Table.Row>
-                            <Table.ColumnHeaderCell>Surname:</Table.ColumnHeaderCell>
-                            <Table.RowHeaderCell>{teacher.surname}</Table.RowHeaderCell>
-                        </Table.Row>
-                        <Table.Row>
-                            <Table.ColumnHeaderCell>Birthdate:</Table.ColumnHeaderCell>
-                            <Table.RowHeaderCell>{teacher.birthDate.getDate()}</Table.RowHeaderCell>
-                        </Table.Row><Table.Row>
-                            <Table.ColumnHeaderCell>Email:</Table.ColumnHeaderCell>
-                            <Table.RowHeaderCell>{teacher.email}</Table.RowHeaderCell>
-                        </Table.Row><Table.Row>
-                            <Table.ColumnHeaderCell>Phone Number:</Table.ColumnHeaderCell>
-                            <Table.RowHeaderCell>{teacher.phone}</Table.RowHeaderCell>
-                        </Table.Row>
-                    </Table.Body>
-                </Table.Root>}
+                <UserDetail params={{ user: user, data: data }} />
             </div>
         </div>
     )
 }
 
-export default TeacherDetail
+export default UserDetailPage

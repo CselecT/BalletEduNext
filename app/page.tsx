@@ -16,13 +16,13 @@ export default function Home() {
       router.refresh();
     }
     else if (status === "authenticated" && session && session.user.role === "ADMIN") {
-      router.push('/admin');
+      router.push('/admin/' + session?.user.id);
       router.refresh();
     }
   }, [status, session]);
   return (
     <main className="h-full">
-      <h1>Welcome</h1>
+      <h1>Welcome! Please Log In!</h1>
     </main>
   )
 }

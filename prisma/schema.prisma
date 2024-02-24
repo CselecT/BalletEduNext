@@ -94,20 +94,22 @@ model ExamStudents {
 }
 
 model Exam {
-  id        Int            @id @default(autoincrement())
-  level     ExamLevel
-  examDate  DateTime
-  evalDate  DateTime?
-  status    ExamStatus
-  teacherId Int
-  teacher   Teacher        @relation(fields: [teacherId], references: [id], onDelete: Cascade)
-  juryId    Int            @map("jury_id")
-  jury      Jury           @relation(fields: [juryId], references: [id], onDelete: Cascade)
-  schoolId  Int            @map("school_id")
-  school    School         @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  videoLink String?
-  students  ExamStudents[]
-  examEval  String?        @db.Text
+  id                Int            @id @default(autoincrement())
+  level             ExamLevel
+  examDate          DateTime
+  evalDate          DateTime?
+  updateDate        DateTime?
+  status            ExamStatus
+  teacherId         Int
+  teacher           Teacher        @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  juryId            Int            @map("jury_id")
+  jury              Jury           @relation(fields: [juryId], references: [id], onDelete: Cascade)
+  schoolId          Int            @map("school_id")
+  school            School         @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  videoLink         String?
+  students          ExamStudents[]
+  examEval          String?        @db.Text
+  examEvalTranslate String?        @db.Text
 }
 
 model Student {

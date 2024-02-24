@@ -10,7 +10,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(validation.error.format(), { status: 400 });
 
   const password = await hash(body.password, 12)
-  console.log({ password })
   try {
     const newUser = await prisma.user.create({
       data: {
@@ -36,7 +35,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(newJury, { status: 201 });
 
   } catch (err) {
-    return NextResponse.json(err, { status: 400 });
+    return NextResponse.json({ error: (err as Error).message }, { status: 400 });
   }
 
 }

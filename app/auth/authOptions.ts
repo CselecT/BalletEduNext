@@ -56,12 +56,14 @@ export const authOptions: NextAuthOptions = {
                 token.role = user.role
                 token.schoolId = user.schoolId
                 token.juryId = user.juryId
+                token.id = user.id
             }
             return token
         },
         // If you want to use the role in client components
         async session({ session, token }) {
             if (session?.user) {
+                session.user.id = token.id
                 session.user.role = token.role
                 session.user.schoolId = token.schoolId
                 session.user.juryId = token.juryId

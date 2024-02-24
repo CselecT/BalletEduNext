@@ -17,6 +17,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { toast } from 'react-hot-toast';
 
 import dayjs, { Dayjs } from 'dayjs';
+import { useSession } from 'next-auth/react'
 
 type ExamForm = z.infer<typeof createExamSchema>
 
@@ -35,17 +36,15 @@ const NewExam = ({ params }: Props) => {
     const [error, setError] = useState('');
     const [isSubmitting, setSubmitting] = useState(false);
     const [selectedStudentIds, setSelectedStudentIds] = useState<number[]>([]);
+    const { status, data: session } = useSession();
 
     const levels = Object.values(ExamLevel);
 
     const handleToggle = (id: number, toggled: boolean) => {
 
-        console.log(id)
-        console.log(toggled)
         if (toggled) {
             setSelectedStudentIds(selectedStudentIds => [...selectedStudentIds, id]);
         } else {
-            // setSelectedStudentIds(selectedStudentIds.filter((student) => student !== id));
             setSelectedStudentIds(selectedStudentIds => selectedStudentIds.filter((student) => student !== id));
         }
         register('students'); // register the field
@@ -53,20 +52,17 @@ const NewExam = ({ params }: Props) => {
     };
 
     const handleJurySelect = (jury: number) => {
-        console.log(jury)
         register('juryid'); // register the field
         setValue('juryid', jury); //
     }
 
 
     const handleTeacherSelect = (teacher: number) => {
-        console.log(teacher)
         register('teacherid'); // register the field
         setValue('teacherid', teacher); //
     }
 
     const handleLevelSelect = (level: string) => {
-        console.log(level)
         register('level'); // register the field
         setValue('level', level); //
     }
@@ -74,20 +70,18 @@ const NewExam = ({ params }: Props) => {
     const handleDateChange = (selectedDate: Dayjs | null) => {
         if (!selectedDate) return;
         setDateSelected(true)
-        console.log(selectedDate)
-        // console.log(selectedDate.toDate())
         register('date'); // register the field
         setValue('date', selectedDate.toDate().toDateString()); // set the value
     }
 
     useEffect(() => {
-        console.log(params.schoolId)
         register('schoolid'); // register the field
         setValue('schoolid', parseInt(params.schoolId)); // set the value
         register('students'); // register the field
         setValue('students', selectedStudentIds); // set the value
     }, [register, setValue, params.schoolId]);
-
+    if (status !== "authenticated" || !session || (session.user.role !== 'ADMIN' && session.user.role !== 'SCHOOL'))
+        return (<div>You are not authorized for this operation!</div>)
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
 

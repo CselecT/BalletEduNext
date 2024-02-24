@@ -2,6 +2,7 @@ import React from 'react'
 import prisma from '@/prisma/client';
 import { Button, Flex, Link, Table } from '@radix-ui/themes';
 import DeleteExamButton from '../_components/DeleteExamButton';
+import TranslateExamButton from '../_components/TranslateExamButton';
 
 interface Props {
     params: { id: string }
@@ -24,11 +25,6 @@ const ExamDetail = async ({ params }: Props) => {
         where: { examId: exam.id },
         include: { student: true }
     });
-
-    // const students = await prisma.student.findMany({
-    //     where: { id: { in: examStudents.map((es) => es.studentId) } }
-    // });
-
     const jury = await prisma.jury.findFirst({
         where: { id: exam.juryId }
     });
@@ -92,6 +88,7 @@ const ExamDetail = async ({ params }: Props) => {
             </Table.Root>
             <Flex gap="3" justify="end">
                 <DeleteExamButton examId={exam.id} />
+                <TranslateExamButton examId={exam.id} />
             </Flex>
         </div>
     )

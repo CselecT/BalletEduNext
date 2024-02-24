@@ -45,7 +45,6 @@ const JuryDetail = async ({ params }: Props) => {
             </div>
 
             {exams?.length === 0 && <div>No exams found</div>}
-            {/* {students && teachers && juries && exams && <NewExam params={{ schoolId, students, teachers, juries }} />} */}
             {exams?.length && exams.length > 0 && <Table.Root variant='surface'>
                 <Table.Header>
                     <Table.Row>

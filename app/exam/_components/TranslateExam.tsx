@@ -1,11 +1,11 @@
 'use client';
 import React, { useEffect, useState } from 'react'
-import { Button, Flex, Link, Table, TextArea, TextField } from '@radix-ui/themes';
+import { Button, Flex, Text, Table, TextArea, TextField } from '@radix-ui/themes';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
-import { evaluateExamSchema } from '@/app/validationSchemas';
+import { translateExamSchema } from '@/app/validationSchemas';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Exam, ExamStudents, Jury, School, Student, Teacher } from '@prisma/client';
@@ -15,11 +15,11 @@ import { useSession } from 'next-auth/react';
 interface Props {
     params: { id: string, exam: Exam, school: School | null, examStudents: ExamStudents[], jury: Jury | null, teacher: Teacher | null, students: Student[] }
 }
-type EvalForm = z.infer<typeof evaluateExamSchema>
+type EditForm = z.infer<typeof translateExamSchema>
 
-const EvalExam = ({ params }: Props) => {
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm<EvalForm>({
-        resolver: zodResolver(evaluateExamSchema),
+const TranslateExam = ({ params }: Props) => {
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm<EditForm>({
+        resolver: zodResolver(translateExamSchema),
     });
     const router = useRouter();
     const [error, setError] = useState('');
@@ -30,9 +30,8 @@ const EvalExam = ({ params }: Props) => {
         register('examId'); // register the field
         setValue('examId', parseInt(params.id)); // set the value
     }, [register, setValue, params.id]);
-    if (status !== "authenticated" || !session || (session.user.role !== 'ADMIN' && session.user.role !== 'JURY'))
+    if (status !== "authenticated" || !session || session.user.role !== 'ADMIN')
         return (<div>You are not authorized for this operation!</div>)
-
     return (
         <div className='mb-5 flex flex-col content-between gap-4'>
             <form className='max-w-m flex flex-col content-between gap-4' onSubmit={handleSubmit(
@@ -41,8 +40,8 @@ const EvalExam = ({ params }: Props) => {
 
                     try {
                         setSubmitting(true)
-                        const result = await axios.post('/api/exam/eval', data);
-                        toast.success("Exam has been evaluated successfully.", { duration: 3000, });
+                        const result = await axios.post('/api/exam/translate', data);
+                        toast.success("Exam has been edited successfully.", { duration: 3000, });
                         router.push('/exam/' + params.id);
                         router.refresh()
                         setSubmitting(false)
@@ -86,62 +85,53 @@ const EvalExam = ({ params }: Props) => {
                             <Table.ColumnHeaderCell>Surname</Table.ColumnHeaderCell>
                             <Table.ColumnHeaderCell>Marking</Table.ColumnHeaderCell>
                             <Table.ColumnHeaderCell>Evaluation</Table.ColumnHeaderCell>
-                            {/* <Table.ColumnHeaderCell>Translation</Table.ColumnHeaderCell> */}
+                            <Table.ColumnHeaderCell>Translation</Table.ColumnHeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                        {params.students && params.students.map((student, index) => (
+                        {params.examStudents && params.examStudents.map((evaluation, index) => (
                             <>
                                 <Table.Row key={index}>
-                                    <Table.RowHeaderCell>{student.name}</Table.RowHeaderCell>
-                                    <Table.RowHeaderCell>{student.surname}</Table.RowHeaderCell>
+                                    <Table.RowHeaderCell>{params.students.find(student => student.id === evaluation.studentId)?.name}</Table.RowHeaderCell>
+                                    <Table.RowHeaderCell>{params.students.find(student => student.id === evaluation.studentId)?.surname}</Table.RowHeaderCell>
                                     <Table.RowHeaderCell>
-                                        {/* {student.marking} */}
-                                        {/* <TextField.Input placeholder="Marking..." {...register(`evals.${index}.marking`)} /> */}
-                                        <input placeholder="Marking..." {...register(`evals.${index}.marking`, {
-                                            valueAsNumber: true,
-                                        })} />
-
+                                        {evaluation.marking}
                                     </Table.RowHeaderCell>
                                     <Table.RowHeaderCell>
-                                        <TextArea placeholder="Evaluation..." {...register(`evals.${index}.eval`)}
+                                        {evaluation.eval}
+                                    </Table.RowHeaderCell>
+                                    <Table.RowHeaderCell>
+                                        <TextArea placeholder="Translation..." {...register(`translations.${index}.evalTranslation`)}
                                         />
-                                        <input type="hidden" {...register(`evals.${index}.studentid`, {
+                                        <input type="hidden" {...register(`translations.${index}.evalid`, {
                                             valueAsNumber: true,
-                                        })} value={student.id} />
+                                        })} value={evaluation.id} />
                                     </Table.RowHeaderCell>
                                 </Table.Row>
-                                {errors.evals?.[index] &&
+                                {errors.translations?.[index] &&
                                     <Table.Row>
                                         <Table.RowHeaderCell />
                                         <Table.RowHeaderCell />
-
+                                        <Table.RowHeaderCell />
+                                        <Table.RowHeaderCell />
                                         <Table.RowHeaderCell>
                                             <ErrorMessage>
-                                                {errors.evals?.[index]?.marking?.message}
-                                            </ErrorMessage>
-                                        </Table.RowHeaderCell>
-                                        <Table.RowHeaderCell>
-                                            <ErrorMessage>
-                                                {errors.evals?.[index]?.eval?.message}
+                                                {errors.translations?.[index]?.evalTranslation?.message}
                                             </ErrorMessage>
                                         </Table.RowHeaderCell>
                                     </Table.Row>
                                 }
-
                             </>
-
                         ))}
                     </Table.Body>
                 </Table.Root>
-                <ErrorMessage>
-                    {errors.evals?.message}
-                </ErrorMessage>
                 <label>General Evaluation</label>
-                <TextArea placeholder="General Evaluation..." {...register(`examEval`)}
+                <Text>{params.exam.examEval}</Text>
+                <label>General Evaluation Translation</label>
+                <TextArea placeholder="General Evaluation Translation..." {...register(`examEvalTranslation`)}
                 />
                 <ErrorMessage>
-                    {errors.examEval?.message}
+                    {errors.examEvalTranslation?.message}
                 </ErrorMessage>
                 <Flex gap="3" justify="end">
                     <Button>Evaluate</Button>
@@ -151,4 +141,4 @@ const EvalExam = ({ params }: Props) => {
     )
 }
 
-export default EvalExam
+export default TranslateExam

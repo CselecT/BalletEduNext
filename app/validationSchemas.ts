@@ -102,16 +102,33 @@ export const createUserSchema = z.object({
     .email("This is not a valid email."),
 });
 
+export const patchPasswordSchema = z.object({
+  password: z.string().min(1, 'Old Password is required.').max(191),
+  newPassword: z.string().min(1, 'New Password is required.').max(191),
+  confirmPassword: z.string().min(1, 'Confirmation is required.').max(191),
+}).refine(
+  (values) => {
+    return values.newPassword === values.confirmPassword;
+  },
+  {
+    message: "Passwords must match!",
+    path: ["confirmPassword"],
+  }
+);
+
 export const patchUserSchema = z.object({
-  userid: z.coerce.number().int().positive('Invalid user id.'),
+  // userid: z.coerce.number().int().positive('Invalid user id.'),
   username: z.string().min(1, 'Username is required.').max(191).optional(),
   password: z.string().min(1, 'Password is required.').max(191).optional(),
   name: z.string().min(1, 'Name is required.').max(191).optional(),
   surname: z.string().min(1, 'Surname is required.').max(191).optional(),
-  role: z.string().min(1, 'Role is required.').max(191).optional(),
+  role: z.string().min(1, 'Role is required.').max(191),
   email: z.string()
     .min(1, { message: "This field has to be filled." })
     .email("This is not a valid email.").optional(),
+  location: z.string().optional(),
+  birthdate: z.string().optional(),
+  phone: z.string().max(191).optional(),
 });
 
 export const createExamSchema = z.object({
@@ -155,6 +172,18 @@ export const evaluateExamSchema = z.object({
   examEval: z.string().min(1, 'Exam Evaluation is required.'),
   examId: z.number(),
 });
+
+export const translationSchema = z.object({
+  evalid: z.coerce.number().int().positive('Invalid eval id.').min(1, 'Eval is required.'),
+  evalTranslation: z.string().min(1, 'Evaluation is required.').max(250, 'Evaluation cannot be longer than 250 characters'),
+});
+
+export const translateExamSchema = z.object({
+  translations: translationSchema.array().nonempty(),
+  examEvalTranslation: z.string().min(1, 'Exam Evaluation is required.'),
+  examId: z.number(),
+});
+
 
 export const createEvaluationSchema = z.object({
   eval: z.string().min(1, 'Evaluation is required.').max(250, 'Evaluation cannot be longer than 250 characters'),

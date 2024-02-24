@@ -24,6 +24,7 @@ const UserPage = async () => {
                         <Table.ColumnHeaderCell>Surname</Table.ColumnHeaderCell>
                         <Table.ColumnHeaderCell>Email</Table.ColumnHeaderCell>
                         <Table.ColumnHeaderCell>Role</Table.ColumnHeaderCell>
+                        <Table.ColumnHeaderCell>Details</Table.ColumnHeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -34,6 +35,8 @@ const UserPage = async () => {
                             <Table.RowHeaderCell>{user.surname}</Table.RowHeaderCell>
                             <Table.RowHeaderCell>{user.email}</Table.RowHeaderCell>
                             <Table.RowHeaderCell>{user.role}</Table.RowHeaderCell>
+                            <Table.RowHeaderCell><Button><Link href={'/user/' + user.id}>Details</Link></Button></Table.RowHeaderCell>
+
                         </Table.Row>
                     ))}
                 </Table.Body>
