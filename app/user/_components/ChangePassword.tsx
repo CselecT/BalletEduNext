@@ -31,15 +31,17 @@ const ChangePassword = ({ params }: Props) => {
     const [isSubmitting, setSubmitting] = useState(false);
     const { status, data: session } = useSession();
 
-    if (status !== "authenticated" || !session || (session.user.id !== params.userId && session.user.role !== 'ADMIN'))
-        return (<div></div>)
+
 
     useEffect(() => {
-        if (session.user.role === 'ADMIN') {
+        if (session?.user.role === 'ADMIN') {
             register('ignorePassword');
             setValue('ignorePassword', true);
         }
     }, [register, setValue]);
+
+    if (status !== "authenticated" || !session || (session.user.id !== params.userId && session.user.role !== 'ADMIN'))
+        return (<div></div>)
 
     return (
 
