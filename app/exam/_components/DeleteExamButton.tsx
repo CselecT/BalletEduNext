@@ -32,7 +32,7 @@ const DeleteExamButton = ({ examId }: { examId: number }) => {
         <>
             <AlertDialog.Root>
                 <AlertDialog.Trigger>
-                    {status === "authenticated" && session && session.user.role === 'ADMIN' || session?.user.role === 'SCHOOL' && <Button color="red" disabled={isDeleting}>
+                    {status === "authenticated" && session && (session.user.role === 'ADMIN' || session?.user.role === 'SCHOOL') && <Button color="red" disabled={isDeleting}>
                         Delete Exam
                         {isDeleting && <Spinner />}
                     </Button>}
