@@ -6,6 +6,7 @@ import UserSkeleton from './UserSkeleton';
 import EditUserButton from './EditUserButton';
 import DeleteUserButton from './DeleteUserButton';
 import ExamList from '@/app/exam/_components/ExamList';
+import { RiAdminLine } from "react-icons/ri";
 
 interface Props {
     params: { user: User, data: Jury | School | null, exams: Exam[] | null }
@@ -17,7 +18,7 @@ const UserDetail = ({ params }: Props) => {
         surname: params.user.surname,
         username: params.user.username,
         email: params.user.email,
-        avatar: params.user.role == 'ADMIN' ? '/admin.png' : params.user.role == 'SCHOOL' ? '/graduation-cap.png' : '/judge.png',
+        avatar: params.user.role == 'ADMIN' ? 'ADMIN' : params.user.role == 'SCHOOL' ? 'SCHOOL' : 'JURY',
         location: params.data && 'location' in params.data ? params.data.location : null,
         birthDate: params.data && 'birthDate' in params.data ? params.data.birthDate : null,
         phone: params.data && 'phone' in params.data ? params.data.phone : null

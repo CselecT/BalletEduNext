@@ -1,5 +1,10 @@
-import { Avatar, Table } from '@radix-ui/themes'
+import { Table } from '@radix-ui/themes'
 import React from 'react'
+import { RiAdminLine } from "react-icons/ri";
+import Avatar from '@mui/material/Avatar';
+import { MdOutlineGrading } from "react-icons/md";
+import { IoSchoolOutline } from "react-icons/io5";
+import { green, pink } from '@mui/material/colors';
 
 interface Props {
     params: { avatar: string, name: string | null, location: string | null, surname: string | null, birthDate: Date | null, username: string | null, email: string | null, phone: string | null }
@@ -10,11 +15,12 @@ const UserSkeleton = ({ params }: Props) => {
         <div className='mb-5 flex flex-col place-items-center gap-4'>
             <div className='mb-5 flex flex-col place-items-center'>
                 <Avatar
-                    size="8"
-                    src={params.avatar}
-                    radius="large"
-                    fallback="U"
-                />
+                    sx={{ width: 128, height: 128, bgcolor: pink[100]  }} 
+                >
+                    {params.avatar === 'SCHOOL' && <IoSchoolOutline size='5em' />}
+                    {params.avatar === 'ADMIN' && <RiAdminLine size='5em' />}
+                    {params.avatar === 'JURY' && <MdOutlineGrading size='5em' />}
+                </Avatar>
             </div>
             <Table.Root variant='surface'>
                 <Table.Body>
