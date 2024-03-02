@@ -1,6 +1,6 @@
 import React from 'react'
 import prisma from '@/prisma/client';
-import { Button, Flex, Link, Table } from '@radix-ui/themes';
+import { Button, Flex, Heading, Link, Table, Text } from '@radix-ui/themes';
 import DeleteExamButton from '../_components/DeleteExamButton';
 import TranslateExamButton from '../_components/TranslateExamButton';
 
@@ -86,6 +86,10 @@ const ExamDetail = async ({ params }: Props) => {
                     ))}
                 </Table.Body>
             </Table.Root>
+            <Heading mb="2" size="4">General Evaluation</Heading>
+            <Text>{exam.examEval}</Text>
+            <Heading mb="2" size="4">General Evaluation Translation</Heading>
+            <Text>{exam.examEvalTranslate}</Text>
             <Flex gap="3" justify="end">
                 <DeleteExamButton examId={exam.id} />
                 <TranslateExamButton examId={exam.id} />

@@ -2,6 +2,7 @@
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react';
+import Link from 'next/link'
 
 export default function Home() {
   const { status, data: session } = useSession();
@@ -20,9 +21,14 @@ export default function Home() {
       router.refresh();
     }
   }, [status, session]);
+  console.log(status, session);
   return (
     <main className="h-full">
-      <h1>Welcome! Please Log In!</h1>
+      
+      {status !== 'authenticated' && <h2 className="mt-6 text-center text-3xl font-extrabold text-pink-400">
+        Welcome! Please  {<Link className='link-accent' href={'/api/auth/signin'}> Log In !</Link>}
+      </h2>}
+      
     </main>
   )
 }

@@ -35,7 +35,6 @@ const EvalExamPage = async ({ params }: Props) => {
         where: { id: { in: examStudents.map((es) => es.studentId) } }
     });
     return (
-
         <EvalExam
             params={{
                 id: params.id,

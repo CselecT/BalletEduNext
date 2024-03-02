@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react'
-import { Button, Flex, Link, Table, TextArea, TextField } from '@radix-ui/themes';
+import { Button, Flex, Heading, Link, Table, TextArea, TextField } from '@radix-ui/themes';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
@@ -41,11 +41,11 @@ const EvalExam = ({ params }: Props) => {
 
                     try {
                         setSubmitting(true)
-                        const result = await axios.post('/api/exam/eval', data);
+                        const result = await axios.patch('/api/exam/eval', data);
                         toast.success("Exam has been evaluated successfully.", { duration: 3000, });
+                        setSubmitting(false)
                         router.push('/exam/' + params.id);
                         router.refresh()
-                        setSubmitting(false)
                     } catch (error) {
                         toast.error("Something went wrong!", { duration: 3000, });
                         setSubmitting(false)
@@ -86,7 +86,6 @@ const EvalExam = ({ params }: Props) => {
                             <Table.ColumnHeaderCell>Surname</Table.ColumnHeaderCell>
                             <Table.ColumnHeaderCell>Marking</Table.ColumnHeaderCell>
                             <Table.ColumnHeaderCell>Evaluation</Table.ColumnHeaderCell>
-                            {/* <Table.ColumnHeaderCell>Translation</Table.ColumnHeaderCell> */}
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
@@ -128,16 +127,14 @@ const EvalExam = ({ params }: Props) => {
                                         </Table.RowHeaderCell>
                                     </Table.Row>
                                 }
-
                             </>
-
                         ))}
                     </Table.Body>
                 </Table.Root>
                 <ErrorMessage>
                     {errors.evals?.message}
                 </ErrorMessage>
-                <label>General Evaluation</label>
+                <Heading mb="2" size="4">General Evaluation</Heading>
                 <TextArea placeholder="General Evaluation..." {...register(`examEval`)}
                 />
                 <ErrorMessage>

@@ -23,16 +23,19 @@ const NavBar = () => {
     return (
         <nav className="flex space-x-6 border-b mb-5 px-5 h-14 items-center">
             <Link href="/"><GiBallerinaShoes color='pink' size='3em' /></Link>
-            <ul className='flex space-x-5'>
-                {links.map(link => <Link key={link.href}
-                    className={classnames({
-                        'link-accent': link.href !== currentPath
-                    })}
-                    // className={`${link.href === currentPath ? '' : 'link-accent'}`} 
-                    href={link.href}>
-                    {link.label}</Link>)}
-                <DarkModeButton />
-            </ul>
+            {status === "authenticated" && <ul className='flex space-x-5'>
+                {links.map(link =>
+
+                    <Link key={link.href}
+                        className={classnames({
+                            'link-accent': link.href !== currentPath
+                        })}
+                        // className={`${link.href === currentPath ? '' : 'link-accent'}`} 
+                        href={link.href}>
+                        {link.label}</Link>)}
+            </ul>}
+            <DarkModeButton />
+
             <Box className='absolute right-10 '>
                 {status === "authenticated" && (
                     <Link className='link-secondary' href="/api/auth/signout">Log out</Link>

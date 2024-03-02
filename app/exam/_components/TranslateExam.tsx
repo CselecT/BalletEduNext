@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react'
-import { Button, Flex, Text, Table, TextArea, TextField } from '@radix-ui/themes';
+import { Button, Flex, Text, Table, TextArea, TextField, Heading } from '@radix-ui/themes';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
@@ -125,9 +125,9 @@ const TranslateExam = ({ params }: Props) => {
                         ))}
                     </Table.Body>
                 </Table.Root>
-                <label>General Evaluation</label>
+                <Heading mb="2" size="4">General Evaluation</Heading>
                 <Text>{params.exam.examEval}</Text>
-                <label>General Evaluation Translation</label>
+                <Heading mb="2" size="4">General Evaluation Translation</Heading>
                 <TextArea placeholder="General Evaluation Translation..." {...register(`examEvalTranslation`)}
                 />
                 <ErrorMessage>

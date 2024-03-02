@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import prisma from '@/prisma/client';
-import { Avatar, Box, Button, Card, Dialog, Flex, Inset, Link, Table } from '@radix-ui/themes';
+import { Avatar, Box, Button, Card, Dialog, Flex, Inset, Table } from '@radix-ui/themes';
 import { useSession } from 'next-auth/react';
 import NewExam from '../../exam/_components/NewExam';
 import NewStudentDialog from '../../student/_components/NewStudentDialog';
 import NewTeacherDialog from '../../teacher/_components/NewTeacherDialog';
 import { Exam, Jury, School, Student, Teacher } from '@prisma/client';
+import Link from 'next/link'
 
 interface Props {
     params: { id: string }
@@ -60,7 +61,7 @@ const SchoolDetail = async ({ params }: Props) => {
                 {students?.length === 0 && <div>No students found </div>}
                 <NewStudentDialog params={{ schoolId }} />
 
-                {students?.length && students.length > 0 && <Table.Root variant='surface'>
+                {students.length > 0 && <Table.Root variant='surface'>
                     <Table.Header>
                         <Table.Row>
                             <Table.ColumnHeaderCell>Student Name</Table.ColumnHeaderCell>
@@ -87,7 +88,7 @@ const SchoolDetail = async ({ params }: Props) => {
                 {teachers?.length === 0 && <div>No teachers found</div>}
                 <NewTeacherDialog params={{ schoolId }} />
 
-                {teachers?.length && teachers.length > 0 && <Table.Root variant='surface'>
+                {teachers.length > 0 && <Table.Root variant='surface'>
                     <Table.Header>
                         <Table.Row>
                             <Table.ColumnHeaderCell>Teacher Name</Table.ColumnHeaderCell>
@@ -110,7 +111,7 @@ const SchoolDetail = async ({ params }: Props) => {
             </div>
             {exams?.length === 0 && <div>No exams found</div>}
             {students && teachers && juries && exams && <NewExam params={{ schoolId, students, teachers, juries }} />}
-            {exams?.length && exams.length > 0 && <Table.Root variant='surface'>
+            {exams.length > 0 && <Table.Root variant='surface'>
                 <Table.Header>
                     <Table.Row>
                         <Table.ColumnHeaderCell>Exam Date</Table.ColumnHeaderCell>

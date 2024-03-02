@@ -2,15 +2,16 @@
 import React from 'react'
 import prisma from '@/prisma/client';
 import { Avatar, Button, Flex, Link, Table } from '@radix-ui/themes';
-import { Jury, School, User } from '@prisma/client';
+import { Jury, School, User, Exam } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import ChangePassword from './ChangePassword';
 import UserSkeleton from './UserSkeleton';
 import EditUserButton from './EditUserButton';
 import DeleteUserButton from './DeleteUserButton';
+import ExamList from '@/app/exam/_components/ExamList';
 
 interface Props {
-    params: { user: User, data: Jury | School | null }
+    params: { user: User, data: Jury | School | null, exams: Exam[] | null}
 }
 
 const UserDetail = ({ params }: Props) => {
@@ -36,6 +37,9 @@ const UserDetail = ({ params }: Props) => {
                 <EditUserButton params={params} />
                 <DeleteUserButton userId={params.user.id} />
             </Flex>
+            {params.user.role == 'JURY' && params.exams &&
+                <ExamList params={{ exams: params.exams }} />
+            }
         </div>
     )
 }

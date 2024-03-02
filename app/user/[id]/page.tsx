@@ -2,6 +2,7 @@ import React from 'react'
 import prisma from '@/prisma/client';
 import { Button, Link, Table } from '@radix-ui/themes';
 import UserDetail from '../_components/UserDetail';
+import { Exam } from '@prisma/client';
 
 interface Props {
     params: { id: string }
@@ -12,7 +13,7 @@ const UserDetailPage = async ({ params }: Props) => {
         where: { id: params.id }
     });
     let data = null;
-
+    let exams = null;
     if (!user) return (<div>User not found</div>);
 
     if (user.role == 'SCHOOL') {
@@ -23,12 +24,15 @@ const UserDetailPage = async ({ params }: Props) => {
         data = await prisma.jury.findFirst({
             where: { accountId: user.id }
         });
+        exams = await prisma.exam.findMany({
+            where: { juryId: data?.id }
+        });
     }
 
     return (
         <div className="h-full">
             <div className='mb-5'>
-                <UserDetail params={{ user: user, data: data }} />
+                <UserDetail params={{ user: user, data: data, exams: exams }} />
             </div>
         </div>
     )

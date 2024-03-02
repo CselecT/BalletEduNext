@@ -41,14 +41,21 @@ const NewExam = ({ params }: Props) => {
     const levels = Object.values(ExamLevel);
 
     const handleToggle = (id: number, toggled: boolean) => {
-
-        if (toggled) {
-            setSelectedStudentIds(selectedStudentIds => [...selectedStudentIds, id]);
-        } else {
-            setSelectedStudentIds(selectedStudentIds => selectedStudentIds.filter((student) => student !== id));
-        }
+        console.log(id, toggled)
         register('students'); // register the field
-        setValue('students', selectedStudentIds); // set the value
+        if (toggled) {
+            setSelectedStudentIds(selectedStudentIds => {
+                const updatedStudentIds = [...selectedStudentIds, id];
+                setValue('students', updatedStudentIds); // set the value
+                return updatedStudentIds;
+            });
+        } else {
+            setSelectedStudentIds(selectedStudentIds => {
+                const updatedStudentIds = selectedStudentIds.filter((student) => student !== id);
+                setValue('students', updatedStudentIds); // set the value
+                return updatedStudentIds;
+            });
+        }
     };
 
     const handleJurySelect = (jury: number) => {
