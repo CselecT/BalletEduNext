@@ -6,9 +6,7 @@ interface Props {
     params: { id: string }
 }
 
-
 const TranslateExamPage = async ({ params }: Props) => {
-
 
     const exam = await prisma.exam.findUnique({
         where: { id: parseInt(params.id) }

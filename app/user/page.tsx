@@ -1,21 +1,15 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Button, Table } from '@radix-ui/themes'
 import Link from 'next/link'
 import prisma from '@/prisma/client';
-import Spinner from '../components/Spinner';
-import { useSession } from 'next-auth/react';
-
 
 const UserPage = async () => {
     const users = await prisma.user.findMany()
-
     return (
         <div className="h-full">
-
             <div className='mb-5'>
                 {(<Button><Link href='/user/new'>Add User</Link></Button>)}
             </div>
-
             <Table.Root variant='surface'>
                 <Table.Header>
                     <Table.Row>
@@ -36,7 +30,6 @@ const UserPage = async () => {
                             <Table.RowHeaderCell>{user.email}</Table.RowHeaderCell>
                             <Table.RowHeaderCell>{user.role}</Table.RowHeaderCell>
                             <Table.RowHeaderCell><Button><Link href={'/user/' + user.id}>Details</Link></Button></Table.RowHeaderCell>
-
                         </Table.Row>
                     ))}
                 </Table.Body>
@@ -44,5 +37,4 @@ const UserPage = async () => {
         </div>
     )
 }
-
 export default UserPage

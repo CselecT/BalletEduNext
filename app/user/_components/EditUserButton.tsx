@@ -13,7 +13,6 @@ import { Jury, School, User } from '@prisma/client'
 import { LocalizationProvider, StaticDateTimePicker } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { toast } from 'react-hot-toast';
-
 import dayjs, { Dayjs } from 'dayjs';
 import { useSession } from 'next-auth/react'
 
@@ -23,10 +22,8 @@ interface Props {
 
 type EditUserForm = z.infer<typeof patchUserSchema>
 
-
 const EditUserButton = ({ params }: Props) => {
     const { status, data: session } = useSession();
-
     const [isSubmitting, setSubmitting] = useState(false);
     const router = useRouter();
     const [error, setError] = useState('');
@@ -52,7 +49,6 @@ const EditUserButton = ({ params }: Props) => {
         return (<div></div>)
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-
             <div className='max-w-l h-full'>
                 <Dialog.Root >
                     <Dialog.Trigger>
@@ -60,7 +56,6 @@ const EditUserButton = ({ params }: Props) => {
                     </Dialog.Trigger>
                     <Dialog.Content>
                         <Dialog.Title>Edit User</Dialog.Title>
-
                         <Flex direction="column" gap="3">
                             <form className='max-w-m flex flex-col content-between gap-4' onSubmit={handleSubmit(async (data) => {
                                 try {
@@ -137,10 +132,8 @@ const EditUserButton = ({ params }: Props) => {
                         </Flex>
                     </Dialog.Content>
                 </Dialog.Root>
-
             </div>
         </LocalizationProvider>
     )
 }
-
 export default EditUserButton

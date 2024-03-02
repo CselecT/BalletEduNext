@@ -1,23 +1,12 @@
-// 'use client'
-import React, { useState } from 'react'
+import React from 'react'
 import { Button, Table } from '@radix-ui/themes'
 import Link from 'next/link'
 import prisma from '@/prisma/client';
-import Spinner from '../components/Spinner';
-import { useSession } from 'next-auth/react';
 
 const SchoolPage = async () => {
     const schools = await prisma.school.findMany()
-    // const [isSubmitting, setSubmitting] = useState(false);
-    // const { status, data: session } = useSession();
-
     return (
         <div className="h-full">
-            {/* 
-            <div className='mb-5'>
-                {(<Button><Link href='/school/new'>Add School</Link></Button>)}
-            </div> */}
-
             <Table.Root variant='surface'>
                 <Table.Header>
                     <Table.Row>
@@ -37,8 +26,6 @@ const SchoolPage = async () => {
                 </Table.Body>
             </Table.Root>
         </div>
-
     )
 }
-
 export default SchoolPage

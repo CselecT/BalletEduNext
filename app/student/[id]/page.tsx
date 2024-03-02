@@ -1,6 +1,6 @@
 import React from 'react'
 import prisma from '@/prisma/client';
-import { Button, Flex, Link, Table } from '@radix-ui/themes';
+import {Flex, Table } from '@radix-ui/themes';
 import DeleteStudentButton from '../_components/DeleteStudentButton';
 
 interface Props {
@@ -8,7 +8,6 @@ interface Props {
 }
 
 const StudentDetail = async ({ params }: Props) => {
-
     const student = await prisma.student.findUnique({
         where: { id: parseInt(params.id) }
     });
@@ -16,9 +15,7 @@ const StudentDetail = async ({ params }: Props) => {
     return (
         <div className="h-full">
             <div className='mb-5'>
-
                 {student && <Table.Root variant='surface'>
-
                     <Table.Body>
                         <Table.Row>
                             <Table.ColumnHeaderCell>Name:</Table.ColumnHeaderCell>
@@ -38,7 +35,6 @@ const StudentDetail = async ({ params }: Props) => {
                             <Table.ColumnHeaderCell>Phone Number:</Table.ColumnHeaderCell>
                             <Table.RowHeaderCell>{student.phone}</Table.RowHeaderCell>
                         </Table.Row>
-
                     </Table.Body>
                 </Table.Root>}
             </div>
@@ -48,5 +44,4 @@ const StudentDetail = async ({ params }: Props) => {
         </div>
     )
 }
-
 export default StudentDetail

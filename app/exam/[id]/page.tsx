@@ -1,6 +1,6 @@
 import React from 'react'
 import prisma from '@/prisma/client';
-import { Button, Flex, Heading, Link, Table, Text } from '@radix-ui/themes';
+import { Flex, Heading, Table, Text } from '@radix-ui/themes';
 import DeleteExamButton from '../_components/DeleteExamButton';
 import TranslateExamButton from '../_components/TranslateExamButton';
 

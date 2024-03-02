@@ -1,4 +1,4 @@
-import { Avatar, Box, Card, Flex, Table } from '@radix-ui/themes'
+import { Avatar, Table } from '@radix-ui/themes'
 import React from 'react'
 
 interface Props {
@@ -50,5 +50,4 @@ const UserSkeleton = ({ params }: Props) => {
         </div>
     )
 }
-
 export default UserSkeleton

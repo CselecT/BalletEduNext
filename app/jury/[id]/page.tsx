@@ -1,6 +1,4 @@
 import React from 'react'
-import prisma from '@/prisma/client';
-import { Button, Link, Table } from '@radix-ui/themes';
 import JuryDetail from '@/app/jury/_components/JuryDetail';
 interface Props {
     params: { id: string }
@@ -13,5 +11,4 @@ const JuryDetailPage = ({ params }: Props) => {
         </div>
     )
 }
-
 export default JuryDetailPage

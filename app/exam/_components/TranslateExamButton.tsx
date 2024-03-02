@@ -5,9 +5,7 @@ import Link from 'next/link';
 import { Button } from '@radix-ui/themes';
 
 const TranslateExamButton = ({ examId }: { examId: number }) => {
-
     const { status, data: session } = useSession();
-
     if (status !== "authenticated" || !session || session.user.role !== 'ADMIN')
         return (<div></div>)
     return (

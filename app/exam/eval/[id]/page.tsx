@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import prisma from '@/prisma/client';
 import EvalExam from '../../_components/EvalExam';
 
@@ -6,9 +6,7 @@ interface Props {
     params: { id: string }
 }
 
-
 const EvalExamPage = async ({ params }: Props) => {
-
 
     const exam = await prisma.exam.findUnique({
         where: { id: parseInt(params.id) }

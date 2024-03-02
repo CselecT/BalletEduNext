@@ -1,9 +1,6 @@
-'use client'
 import React from 'react'
-import prisma from '@/prisma/client';
-import { Avatar, Button, Flex, Link, Table } from '@radix-ui/themes';
+import { Flex, Heading, Text } from '@radix-ui/themes';
 import { Jury, School, User, Exam } from '@prisma/client';
-import { useSession } from 'next-auth/react';
 import ChangePassword from './ChangePassword';
 import UserSkeleton from './UserSkeleton';
 import EditUserButton from './EditUserButton';
@@ -11,12 +8,10 @@ import DeleteUserButton from './DeleteUserButton';
 import ExamList from '@/app/exam/_components/ExamList';
 
 interface Props {
-    params: { user: User, data: Jury | School | null, exams: Exam[] | null}
+    params: { user: User, data: Jury | School | null, exams: Exam[] | null }
 }
 
 const UserDetail = ({ params }: Props) => {
-    const { status, data: session } = useSession();
-
     const skeletonParams = {
         name: params.user.name,
         surname: params.user.surname,
@@ -28,7 +23,6 @@ const UserDetail = ({ params }: Props) => {
         phone: params.data && 'phone' in params.data ? params.data.phone : null
     };
 
-
     return (
         <div className='mb-5 flex flex-col place-items-center gap-4'>
             <UserSkeleton params={skeletonParams} />
@@ -37,9 +31,16 @@ const UserDetail = ({ params }: Props) => {
                 <EditUserButton params={params} />
                 <DeleteUserButton userId={params.user.id} />
             </Flex>
-            {params.user.role == 'JURY' && params.exams &&
+            {params.user.role == 'ADMIN' &&
+                <Heading mb="2" size="4">Exams To Be Reviewed</Heading>
+            }
+            {params.user.role == 'JURY' &&
+                <Heading mb="2" size="4">Assigned Exams</Heading>
+            }
+            {params.exams &&
                 <ExamList params={{ exams: params.exams }} />
             }
+            {!params.exams && <Text>No exams found.</Text>}
         </div>
     )
 }

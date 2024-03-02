@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import NewStudent from '@/app/student/_components/NewStudent'
 
 interface Props {
@@ -12,5 +12,4 @@ const NewStudentPage = ({ params }: Props) => {
         </div >
     )
 }
-
 export default NewStudentPage

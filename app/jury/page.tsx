@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Button, Flex, Table } from '@radix-ui/themes'
 import Link from 'next/link'
 import prisma from '@/prisma/client';
@@ -28,7 +28,6 @@ const JuryPage = async () => {
                             <Table.RowHeaderCell>{jury.phone}</Table.RowHeaderCell>
                             <Table.RowHeaderCell>{jury.birthDate.toDateString()}</Table.RowHeaderCell>
                             <Table.RowHeaderCell><Button><Link href={'/user/' + jury.accountId}>Details</Link></Button></Table.RowHeaderCell>
-
                         </Table.Row>
                     ))}
                 </Table.Body>

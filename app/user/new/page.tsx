@@ -1,6 +1,5 @@
 'use client'
-import { Button, Callout, DropdownMenu, RadioGroup, Select, TextArea, TextField } from '@radix-ui/themes'
-import { CaretDownIcon, ExclamationTriangleIcon } from '@radix-ui/react-icons'
+import { Button, TextField } from '@radix-ui/themes'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
@@ -13,7 +12,6 @@ import Spinner from '@/app/components/Spinner'
 import toast from 'react-hot-toast'
 
 type UserForm = z.infer<typeof createUserSchema>
-
 
 const NewUser = () => {
     const router = useRouter();
@@ -34,8 +32,6 @@ const NewUser = () => {
                 try {
                     setSubmitting(true)
                     await axios.post('/api/user', data);
-                    // router.push('/user')
-                    // router.refresh()
                     toast.success("User has been created successfully.", { duration: 3000, });
                     setSubmitting(false)
                 } catch (error) {
@@ -85,5 +81,4 @@ const NewUser = () => {
         </div>
     )
 }
-
 export default NewUser

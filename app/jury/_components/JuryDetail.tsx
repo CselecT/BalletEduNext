@@ -1,11 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import prisma from '@/prisma/client';
-import { Avatar, Box, Button, Card, Dialog, Flex, Inset, Link, Table } from '@radix-ui/themes';
-import { useSession } from 'next-auth/react';
-import NewExam from '../../exam/_components/NewExam';
-import NewStudentDialog from '../../student/_components/NewStudentDialog';
-import NewTeacherDialog from '../../teacher/_components/NewTeacherDialog';
-import { Exam, ExamStatus, Jury, School, Student, Teacher } from '@prisma/client';
+import { Avatar, Box, Button, Card,  Flex, Link, Table } from '@radix-ui/themes';
+import { ExamStatus } from '@prisma/client';
 
 interface Props {
     params: { id: string }

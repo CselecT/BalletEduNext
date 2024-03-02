@@ -1,6 +1,5 @@
 'use client'
-import { Button, Callout, Dialog, Flex, Grid, Inset, Select, Switch, Table, TextArea, TextField } from '@radix-ui/themes'
-// import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
+import { Button, Flex, TextField } from '@radix-ui/themes'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
@@ -26,8 +25,6 @@ const NewStudent = ({ params }: Props) => {
         resolver: zodResolver(createStudentSchema)
     });
     const [error, setError] = useState('');
-    const [result, setResult] = useState(0);
-
     const [dateSelected, setDateSelected] = useState(false);
     const [isSubmitting, setSubmitting] = useState(false);
 
@@ -48,7 +45,6 @@ const NewStudent = ({ params }: Props) => {
     }
 
     return (
-
         <div className='max-w-xl h-full'>
             <form className='flex flex-col content-between gap-4' onSubmit={handleSubmit(async (data) => {
                 try {
@@ -59,9 +55,7 @@ const NewStudent = ({ params }: Props) => {
                     router.refresh()
                     setSubmitting(false)
                 } catch (error) {
-
                     toast.error("Something went wrong!", { duration: 3000, });
-
                     setSubmitting(false)
                     setError('Input is not valid!')
                 }
@@ -105,7 +99,5 @@ const NewStudent = ({ params }: Props) => {
             </form>
         </div>
     )
-
 }
-
 export default NewStudent

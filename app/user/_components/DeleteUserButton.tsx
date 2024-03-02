@@ -1,5 +1,4 @@
 'use client';
-
 import Spinner from '@/app/components/Spinner'
 import { AlertDialog, Button, Flex } from '@radix-ui/themes';
 import axios from 'axios';
@@ -32,7 +31,7 @@ const DeleteUserButton = ({ userId }: { userId: string }) => {
         <>
             <AlertDialog.Root>
                 <AlertDialog.Trigger>
-                    {status === "authenticated" && session && session.user.role === 'ADMIN' && session.user.id!==userId && <Button color="red" disabled={isDeleting}>
+                    {status === "authenticated" && session && session.user.role === 'ADMIN' && session.user.id !== userId && <Button color="red" disabled={isDeleting}>
                         Delete User
                         {isDeleting && <Spinner />}
                     </Button>}

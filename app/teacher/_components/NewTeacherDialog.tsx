@@ -3,13 +3,11 @@ import { Button, Dialog, Flex } from '@radix-ui/themes'
 import React from 'react'
 import NewTeacher from './NewTeacher'
 
-
 interface Props {
     params: { schoolId: string }
 }
 
 const NewTeacherDialog = ({ params }: Props) => {
-
     return (
         <Dialog.Root >
             <Dialog.Trigger>
@@ -17,10 +15,6 @@ const NewTeacherDialog = ({ params }: Props) => {
             </Dialog.Trigger>
             <Dialog.Content>
                 <Dialog.Title>Register Teacher </Dialog.Title>
-                {/* <Dialog.Description>
-                The following users have access to this project.
-            </Dialog.Description> */}
-
                 <Flex direction="column" gap="3">
                     <NewTeacher params={{ schoolId: params.schoolId }} />
                 </Flex>
@@ -34,7 +28,5 @@ const NewTeacherDialog = ({ params }: Props) => {
             </Dialog.Content>
         </Dialog.Root>
     )
-
 }
-
 export default NewTeacherDialog

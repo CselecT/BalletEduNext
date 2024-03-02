@@ -1,6 +1,5 @@
 'use client'
-import { Button, Callout, Dialog, Flex, Grid, Inset, Select, Switch, Table, TextArea, TextField } from '@radix-ui/themes'
-// import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
+import { Button,  Dialog, Flex, Select, Switch, Table, TextField } from '@radix-ui/themes'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
@@ -11,12 +10,10 @@ import { z } from 'zod'
 import ErrorMessage from '@/app/components/ErrorMessage'
 import Spinner from '@/app/components/Spinner'
 import { ExamLevel, Jury, Student, Teacher } from '@prisma/client'
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider, StaticDateTimePicker } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { toast } from 'react-hot-toast';
-
-import dayjs, { Dayjs } from 'dayjs';
+import { Dayjs } from 'dayjs';
 import { useSession } from 'next-auth/react'
 
 type ExamForm = z.infer<typeof createExamSchema>
@@ -182,14 +179,8 @@ const NewExam = ({ params }: Props) => {
                                     {errors.videolink?.message}
                                 </ErrorMessage>
                                 <label>Exam Date</label>
-                                {/* <DateTimePicker
-                                    // onChange={handleDateChange}
-                                    // defaultValue={dayjs('2022-04-17T15:30')}
-                                    label="Enter exam date and time"
-                                /> */}
                                 <StaticDateTimePicker
                                     onChange={handleDateChange}
-                                // label="Enter exam date and time"
                                 />
                                 <ErrorMessage>
                                     {!dateSelected && 'Date is required!'}
@@ -208,10 +199,8 @@ const NewExam = ({ params }: Props) => {
                         </Flex>
                     </Dialog.Content>
                 </Dialog.Root>
-
             </div>
         </LocalizationProvider>
-
     )
 }
 

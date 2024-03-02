@@ -12,6 +12,9 @@ const AdminPage = async ({ params }: Props) => {
     const user = await prisma.user.findUnique({
         where: { id: params.id }
     });
+    const exams = await prisma.exam.findMany({
+        where: { status: 'REVIEW'}
+    });
     return (
         <div className="max-w-xxl flex  flex-row place-content-between place-items-center ">
             <div className='max-w-l flex flex-col content-between gap-4 place-items-start'>
@@ -22,10 +25,7 @@ const AdminPage = async ({ params }: Props) => {
                 <Button className='w-full'><Link href='/jury'>View Juries</Link></Button>
                 <Button className='w-full'><Link href='/jury/new'>Add Jury</Link></Button>
             </div>
-            {/* <div className="max-w-xl "> */}
-            {user && <UserDetail params={{ user: user, data: null }} />}
-            {/* </div> */}
-
+            {user && <UserDetail params={{ user: user, data: null,exams:exams }} />}
         </div>
     )
 }

@@ -6,11 +6,9 @@ import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { patchPasswordSchema } from '@/app/validationSchemas'
-import { set, z } from 'zod'
+import { z } from 'zod'
 import ErrorMessage from '@/app/components/ErrorMessage'
 import Spinner from '@/app/components/Spinner'
-import { LocalizationProvider, StaticDateTimePicker } from '@mui/x-date-pickers'
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { toast } from 'react-hot-toast';
 import { useSession } from 'next-auth/react'
 
@@ -22,16 +20,12 @@ interface Props {
 
 const ChangePassword = ({ params }: Props) => {
     const router = useRouter();
-
     const { register, control, handleSubmit, setValue, formState: { errors } } = useForm<PasswordForm>({
         resolver: zodResolver(patchPasswordSchema)
     });
-
     const [error, setError] = useState('');
     const [isSubmitting, setSubmitting] = useState(false);
     const { status, data: session } = useSession();
-
-
 
     useEffect(() => {
         if (session?.user.role === 'ADMIN') {
@@ -44,7 +38,6 @@ const ChangePassword = ({ params }: Props) => {
         return (<div></div>)
 
     return (
-
         <div className='max-w-l h-full'>
             <Dialog.Root >
                 <Dialog.Trigger>
@@ -52,7 +45,6 @@ const ChangePassword = ({ params }: Props) => {
                 </Dialog.Trigger>
                 <Dialog.Content>
                     <Dialog.Title>Change Password</Dialog.Title>
-
                     <Flex direction="column" gap="3">
                         <form className='max-w-m flex flex-col content-between gap-4' onSubmit={handleSubmit(async (data) => {
                             try {
@@ -104,8 +96,6 @@ const ChangePassword = ({ params }: Props) => {
                 </Dialog.Content>
             </Dialog.Root>
         </div>
-
     )
 }
-
 export default ChangePassword

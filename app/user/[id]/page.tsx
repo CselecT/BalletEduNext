@@ -1,8 +1,6 @@
 import React from 'react'
 import prisma from '@/prisma/client';
-import { Button, Link, Table } from '@radix-ui/themes';
 import UserDetail from '../_components/UserDetail';
-import { Exam } from '@prisma/client';
 
 interface Props {
     params: { id: string }
@@ -37,5 +35,4 @@ const UserDetailPage = async ({ params }: Props) => {
         </div>
     )
 }
-
 export default UserDetailPage

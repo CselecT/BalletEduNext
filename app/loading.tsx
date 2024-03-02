@@ -1,6 +1,5 @@
 import React from 'react'
 import Spinner from './components/Spinner'
-import { AtomSpinner } from 'react-epic-spinners'
 
 const loading = () => {
   return (
@@ -9,5 +8,4 @@ const loading = () => {
   </h2></div>
   )
 }
-
 export default loading

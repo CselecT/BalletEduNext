@@ -1,5 +1,5 @@
 'use client'
-import { Button, Callout, Dialog, Flex, Grid, Inset, Select, Switch, Table, TextArea, TextField } from '@radix-ui/themes'
+import { Button, Flex, TextField } from '@radix-ui/themes'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
@@ -100,7 +100,5 @@ const NewTeacher = ({ params }: Props) => {
             </form>
         </div>
     )
-
 }
-
 export default NewTeacher
