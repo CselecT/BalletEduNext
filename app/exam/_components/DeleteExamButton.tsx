@@ -1,5 +1,4 @@
 'use client';
-
 import Spinner from '@/app/components/Spinner'
 import { AlertDialog, Button, Flex } from '@radix-ui/themes';
 import axios from 'axios';
@@ -27,7 +26,7 @@ const DeleteExamButton = ({ examId }: { examId: number }) => {
             setError(true);
         }
     };
-
+console.log(session,status)
     return (
         <>
             <AlertDialog.Root>

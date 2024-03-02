@@ -41,7 +41,7 @@ const UserDetail = ({ params }: Props) => {
             {params.exams &&
                 <ExamList params={{ exams: params.exams }} />
             }
-            {!params.exams && <Text>No exams found.</Text>}
+            {!params.exams && params.user.role !== 'SCHOOL' && <Text>No exams found.</Text>}
         </div>
     )
 }
