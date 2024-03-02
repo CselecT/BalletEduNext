@@ -4,7 +4,7 @@ import { RiAdminLine } from "react-icons/ri";
 import Avatar from '@mui/material/Avatar';
 import { MdOutlineGrading } from "react-icons/md";
 import { IoSchoolOutline } from "react-icons/io5";
-import { green, pink } from '@mui/material/colors';
+import { pink } from '@mui/material/colors';
 
 interface Props {
     params: { avatar: string, name: string | null, location: string | null, surname: string | null, birthDate: Date | null, username: string | null, email: string | null, phone: string | null }
