@@ -31,7 +31,7 @@ const DeleteUserButton = ({ userId }: { userId: string }) => {
         <>
             <AlertDialog.Root>
                 <AlertDialog.Trigger>
-                    {status === "authenticated" && session && session.user.role === 'ADMIN' && session.user.id !== userId && <Button color="red" disabled={isDeleting}>
+                    {status === "authenticated" && session && session.user.role === 'ADMIN' && session.user.id !== userId && <Button color="red" variant="surface" disabled={isDeleting}>
                         Delete User
                         {isDeleting && <Spinner />}
                     </Button>}
@@ -49,7 +49,7 @@ const DeleteUserButton = ({ userId }: { userId: string }) => {
                             </Button>
                         </AlertDialog.Cancel>
                         <AlertDialog.Action>
-                            <Button color="red" onClick={deleteUser}>
+                            <Button color="red" onClick={deleteUser} variant="surface">
                                 Delete User
                             </Button>
                         </AlertDialog.Action>

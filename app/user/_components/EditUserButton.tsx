@@ -44,7 +44,7 @@ const EditUserButton = ({ params }: Props) => {
             setValue('birthdate', params.data?.birthDate.toDateString());
         }
 
-    }, [register, setValue, params.user.role]);
+    }, [register, setValue, params.user.role, params.data]);
     if (status !== "authenticated" || !session || session.user.role !== 'ADMIN')
         return (<div></div>)
     return (
@@ -52,7 +52,7 @@ const EditUserButton = ({ params }: Props) => {
             <div className='max-w-l h-full'>
                 <Dialog.Root >
                     <Dialog.Trigger>
-                        <Button>Edit User</Button>
+                        <Button variant="surface">Edit User</Button>
                     </Dialog.Trigger>
                     <Dialog.Content>
                         <Dialog.Title>Edit User</Dialog.Title>
@@ -119,7 +119,7 @@ const EditUserButton = ({ params }: Props) => {
                                         {errors.phone?.message}
                                     </ErrorMessage></div>}
                                 <Flex gap="3" justify="between">
-                                    <Button disabled={isSubmitting}>Edit User{isSubmitting && <Spinner />}</Button>
+                                    <Button variant="surface" disabled={isSubmitting}>Edit User{isSubmitting && <Spinner />}</Button>
                                 </Flex>
                             </form>
                         </Flex>

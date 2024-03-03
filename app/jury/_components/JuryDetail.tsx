@@ -55,9 +55,9 @@ const JuryDetail = async ({ params }: Props) => {
                         <Table.Row key={exam.id}>
                             <Table.RowHeaderCell>{exam.examDate.toDateString()}</Table.RowHeaderCell>
                             <Table.RowHeaderCell>{exam.status}</Table.RowHeaderCell>
-                            <Table.Cell><Button variant="outline"><Link href={'/exam/' + exam.id}>Exam Details</Link></Button></Table.Cell>
+                            <Table.Cell><Button variant="surface"><Link href={'/exam/' + exam.id}>Exam Details</Link></Button></Table.Cell>
                             {<Table.Cell>
-                                <Button variant="outline"
+                                <Button variant="surface"
                                     disabled={exam.status !== ExamStatus.TO_BE_EVALUATED}>
                                     {exam.status === ExamStatus.TO_BE_EVALUATED ? (
                                         <Link href={'/exam/eval/' + exam.id}>Evaluate Exam</Link>

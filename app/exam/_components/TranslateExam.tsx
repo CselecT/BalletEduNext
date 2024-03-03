@@ -134,7 +134,7 @@ const TranslateExam = ({ params }: Props) => {
                     {errors.examEvalTranslation?.message}
                 </ErrorMessage>
                 <Flex gap="3" justify="end">
-                    <Button>Evaluate</Button>
+                    <Button variant="surface">Evaluate</Button>
                 </Flex>
             </form>
         </div>

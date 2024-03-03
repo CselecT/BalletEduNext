@@ -1,5 +1,5 @@
 'use client'
-import { Button,  Dialog, Flex, Select, Switch, Table, TextField } from '@radix-ui/themes'
+import { Button, Dialog, Flex, Select, Switch, Table, TextField } from '@radix-ui/themes'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
@@ -83,7 +83,7 @@ const NewExam = ({ params }: Props) => {
         setValue('schoolid', parseInt(params.schoolId)); // set the value
         register('students'); // register the field
         setValue('students', selectedStudentIds); // set the value
-    }, [register, setValue, params.schoolId]);
+    }, [register, setValue, params.schoolId, selectedStudentIds]);
     if (status !== "authenticated" || !session || (session.user.role !== 'ADMIN' && session.user.role !== 'SCHOOL'))
         return (<div>You are not authorized for this operation!</div>)
     return (
@@ -92,7 +92,7 @@ const NewExam = ({ params }: Props) => {
             <div className='max-w-l h-full'>
                 <Dialog.Root >
                     <Dialog.Trigger>
-                        <Button>Add Exam</Button>
+                        <Button variant="surface" >Add Exam</Button>
                     </Dialog.Trigger>
                     <Dialog.Content>
                         <Dialog.Title>Add Exam</Dialog.Title>
@@ -186,7 +186,7 @@ const NewExam = ({ params }: Props) => {
                                     {!dateSelected && 'Date is required!'}
                                 </ErrorMessage>
                                 <Flex gap="3" justify="between">
-                                    <Button disabled={isSubmitting}>Add New Exam{isSubmitting && <Spinner />}</Button>
+                                    <Button variant="surface" disabled={isSubmitting}>Add New Exam{isSubmitting && <Spinner />}</Button>
                                 </Flex>
                             </form>
                         </Flex>

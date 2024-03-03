@@ -20,7 +20,7 @@ export default function Home() {
       router.push('/admin/' + session?.user.id);
       router.refresh();
     }
-  }, [status, session]);
+  }, [status, session, router]);
   console.log(status, session);
   return (
     <main className="h-full">

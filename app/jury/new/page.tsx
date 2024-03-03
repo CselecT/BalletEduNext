@@ -91,7 +91,7 @@ const NewJury = () => {
                 <ErrorMessage>
                     {errors.password?.message}
                 </ErrorMessage>
-                <Button disabled={isSubmitting}>Add New Jury{isSubmitting && <Spinner />}</Button>
+                <Button disabled={isSubmitting} variant="surface" >Add New Jury{isSubmitting && <Spinner />}</Button>
             </form>
         </div>
     )

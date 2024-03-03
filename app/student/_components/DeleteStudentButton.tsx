@@ -31,7 +31,7 @@ const DeleteStudentButton = ({ studentId }: { studentId: number }) => {
         <>
             <AlertDialog.Root>
                 <AlertDialog.Trigger>
-                    {(status === "authenticated" && session && session.user.role === 'ADMIN' || session?.user.role === 'SCHOOL') && <Button color="red" disabled={isDeleting}>
+                    {(status === "authenticated" && session && session.user.role === 'ADMIN' || session?.user.role === 'SCHOOL') && <Button color="red" variant="surface" disabled={isDeleting}>
                         Delete Student
                         {isDeleting && <Spinner />}
                     </Button>}
@@ -49,7 +49,7 @@ const DeleteStudentButton = ({ studentId }: { studentId: number }) => {
                             </Button>
                         </AlertDialog.Cancel>
                         <AlertDialog.Action>
-                            <Button color="red" onClick={deleteStudent}>
+                            <Button variant="surface" color="red" onClick={deleteStudent}>
                                 Delete Student
                             </Button>
                         </AlertDialog.Action>
@@ -62,7 +62,7 @@ const DeleteStudentButton = ({ studentId }: { studentId: number }) => {
                     <AlertDialog.Description>
                         This Student could not be deleted.
                     </AlertDialog.Description>
-                    <Button
+                    <Button 
                         color="gray"
                         variant="soft"
                         mt="2"

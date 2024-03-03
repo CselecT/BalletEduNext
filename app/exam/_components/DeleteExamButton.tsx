@@ -26,12 +26,11 @@ const DeleteExamButton = ({ examId }: { examId: number }) => {
             setError(true);
         }
     };
-console.log(session,status)
     return (
         <>
             <AlertDialog.Root>
                 <AlertDialog.Trigger>
-                    {status === "authenticated" && session && (session.user.role === 'ADMIN' || session?.user.role === 'SCHOOL') && <Button color="red" disabled={isDeleting}>
+                    {status === "authenticated" && session && (session.user.role === 'ADMIN' || session?.user.role === 'SCHOOL') && <Button variant="surface" color="red" disabled={isDeleting}>
                         Delete Exam
                         {isDeleting && <Spinner />}
                     </Button>}
@@ -44,12 +43,12 @@ console.log(session,status)
                     </AlertDialog.Description>
                     <Flex mt="4" gap="3" justify="end">
                         <AlertDialog.Cancel>
-                            <Button variant="soft" color="gray">
+                            <Button variant="surface" color="gray">
                                 Cancel
                             </Button>
                         </AlertDialog.Cancel>
                         <AlertDialog.Action>
-                            <Button color="red" onClick={deleteExam}>
+                            <Button variant="surface" color="red" onClick={deleteExam}>
                                 Delete Exam
                             </Button>
                         </AlertDialog.Action>

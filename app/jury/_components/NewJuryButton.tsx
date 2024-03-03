@@ -41,7 +41,7 @@ const NewJuryButton = () => {
         <div className='max-w-xl h-full'>
             <Dialog.Root >
                 <Dialog.Trigger>
-                    <Button>Add Jury</Button>
+                    <Button variant="surface">Add Jury</Button>
                 </Dialog.Trigger>
                 <Dialog.Content>
                     <Dialog.Title>Add Jury</Dialog.Title>
@@ -108,7 +108,7 @@ const NewJuryButton = () => {
                             <ErrorMessage>
                                 {errors.password?.message}
                             </ErrorMessage>
-                            <Button disabled={isSubmitting}>Add New Jury{isSubmitting && <Spinner />}</Button>
+                            <Button  variant="surface" disabled={isSubmitting}>Add New Jury{isSubmitting && <Spinner />}</Button>
                         </form>
                         <Dialog.Close>
                             <Button variant="soft" color="gray">

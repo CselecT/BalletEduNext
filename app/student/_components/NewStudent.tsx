@@ -94,7 +94,7 @@ const NewStudent = ({ params }: Props) => {
                     {errors.phone?.message}
                 </ErrorMessage>
                 <Flex gap="3" justify="between">
-                    <Button disabled={isSubmitting}>Add New Student{isSubmitting && <Spinner />}</Button>
+                    <Button disabled={isSubmitting} variant="surface">Add New Student{isSubmitting && <Spinner />}</Button>
                 </Flex>
             </form>
         </div>

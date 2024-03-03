@@ -32,7 +32,7 @@ const ChangePassword = ({ params }: Props) => {
             register('ignorePassword');
             setValue('ignorePassword', true);
         }
-    }, [register, setValue]);
+    }, [register, setValue, session?.user.role]);
 
     if (status !== "authenticated" || !session || (session.user.id !== params.userId && session.user.role !== 'ADMIN'))
         return (<div></div>)
@@ -41,7 +41,7 @@ const ChangePassword = ({ params }: Props) => {
         <div className='max-w-l h-full'>
             <Dialog.Root >
                 <Dialog.Trigger>
-                    <Button>Change Password</Button>
+                    <Button variant="surface">Change Password</Button>
                 </Dialog.Trigger>
                 <Dialog.Content>
                     <Dialog.Title>Change Password</Dialog.Title>
@@ -82,7 +82,7 @@ const ChangePassword = ({ params }: Props) => {
                             </ErrorMessage>
 
                             <Flex gap="3" justify="between">
-                                <Button disabled={isSubmitting}>Change Password{isSubmitting && <Spinner />}</Button>
+                                <Button disabled={isSubmitting} variant="surface">Change Password{isSubmitting && <Spinner />}</Button>
                             </Flex>
                         </form>
                     </Flex>

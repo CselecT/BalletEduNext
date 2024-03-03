@@ -76,7 +76,7 @@ const NewUser = () => {
                     {errors.password?.message}
                 </ErrorMessage>
 
-                <Button disabled={isSubmitting}>Add New User{isSubmitting && <Spinner />}</Button>
+                <Button disabled={isSubmitting} variant="surface">Add New User{isSubmitting && <Spinner />}</Button>
             </form>
         </div>
     )

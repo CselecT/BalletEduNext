@@ -141,7 +141,7 @@ const EvalExam = ({ params }: Props) => {
                     {errors.examEval?.message}
                 </ErrorMessage>
                 <Flex gap="3" justify="end">
-                    <Button>Evaluate</Button>
+                    <Button variant="surface">Evaluate</Button>
                 </Flex>
             </form>
         </div>

@@ -63,7 +63,7 @@ const NewSchool = () => {
                 <ErrorMessage>
                     {errors.email?.message}
                 </ErrorMessage>
-                <Button disabled={isSubmitting}>Add New School{isSubmitting && <Spinner />}</Button>
+                <Button disabled={isSubmitting} variant="surface">Add New School{isSubmitting && <Spinner />}</Button>
             </form>
         </div>
     )

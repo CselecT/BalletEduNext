@@ -11,7 +11,7 @@ const NewStudentDialog = ({ params }: Props) => {
     return (
         <Dialog.Root >
             <Dialog.Trigger>
-                <Button>Register Student</Button>
+                <Button variant="surface">Register Student</Button>
             </Dialog.Trigger>
             <Dialog.Content>
                 <Dialog.Title>Register Student </Dialog.Title>
