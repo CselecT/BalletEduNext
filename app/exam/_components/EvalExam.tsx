@@ -65,7 +65,7 @@ const EvalExam = ({ params }: Props) => {
                             </Table.Row>
                             <Table.Row>
                                 <Table.ColumnHeaderCell>Level:</Table.ColumnHeaderCell>
-                                <Table.RowHeaderCell>{params.exam.level}</Table.RowHeaderCell>
+                                <Table.RowHeaderCell>{params.exam.level.replace('k','').replaceAll('_',' ')}</Table.RowHeaderCell>
                             </Table.Row><Table.Row>
                                 <Table.ColumnHeaderCell>Teacher:</Table.ColumnHeaderCell>
                                 {params.teacher && <Table.RowHeaderCell>{params.teacher.name + ' ' + params.teacher.surname}</Table.RowHeaderCell>}

@@ -41,8 +41,9 @@ export async function POST(request: NextRequest) {
     if (student === undefined) return;
     const newExamStudents = await prisma.examStudents.create({
       data: {
-        student: { connect: { id: student } },
-        exam: { connect: { id: newExam.id } }
+        student: { connect: { id: student[0] } },
+        exam: { connect: { id: newExam.id } },
+        studentOrder: student[1]
       }
     });
   });

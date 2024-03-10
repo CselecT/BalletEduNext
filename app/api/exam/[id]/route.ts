@@ -20,13 +20,14 @@ export async function PATCH(
         });
 
     const exam = await prisma.exam.findUnique({
-        where: { id: body.id },
+        where: { id: parseInt(params.id) },
     });
     if (!exam)
         return NextResponse.json(
             { error: "Invalid exam." },
             { status: 400 }
         );
+    const status = body.videolink ? ExamStatus.TO_BE_EVALUATED : ExamStatus.ONGOING;
 
     const updatedExam = await prisma.exam.update({
         where: { id: exam.id },
@@ -34,25 +35,36 @@ export async function PATCH(
             videoLink: body.videolink,
             level: body.level,
             examDate: new Date(body.date),
-            status: ExamStatus.ONGOING,
+            status: status,
             teacher: {
                 connect: { id: body.teacherid }
             },
             jury: {
                 connect: { id: body.juryid }
 
-            },
-            school: {
-                connect: { id: body.schoolid }
             }
         },
         include: {
-            school: true,
             teacher: true,
             jury: true,
         }
     });
 
+    const oldExamStudents = await prisma.examStudents.deleteMany({
+        where: { examId: exam.id }
+    });
+   
+
+    body.students.forEach(async (student: any) => {
+        if (student === undefined) return;
+        const newExamStudents = await prisma.examStudents.create({
+            data: {
+                student: { connect: { id: student[0] } },
+                exam: { connect: { id: updatedExam.id } },
+                studentOrder: student[1]
+            }
+        });
+    });
     return NextResponse.json(updatedExam);
 }
 

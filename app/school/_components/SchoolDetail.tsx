@@ -113,6 +113,7 @@ const SchoolDetail = async ({ params }: Props) => {
                 <Table.Header>
                     <Table.Row>
                         <Table.ColumnHeaderCell>Exam Date</Table.ColumnHeaderCell>
+                        <Table.ColumnHeaderCell>Exam Level</Table.ColumnHeaderCell>
                         <Table.ColumnHeaderCell>Exam Status</Table.ColumnHeaderCell>
                         <Table.ColumnHeaderCell>Exam Details</Table.ColumnHeaderCell>
                     </Table.Row>
@@ -121,7 +122,8 @@ const SchoolDetail = async ({ params }: Props) => {
                     {exams.map(exam => (
                         <Table.Row key={exam.id}>
                             <Table.RowHeaderCell>{exam.examDate.toDateString()}</Table.RowHeaderCell>
-                            <Table.RowHeaderCell>{exam.status}</Table.RowHeaderCell>
+                            <Table.RowHeaderCell>{exam.level.toString().replaceAll('_', ' ').replace('k','')}</Table.RowHeaderCell>
+                            <Table.RowHeaderCell>{exam.status.toString().replaceAll('_', ' ')}</Table.RowHeaderCell>
                             <Table.Cell><Button variant="outline"><Link href={'/exam/' + exam.id}>Exam Details</Link></Button></Table.Cell>
                         </Table.Row>
                     ))}

@@ -139,35 +139,93 @@ export const patchUserSchema = z.object({
   birthdate: z.string().optional(),
   phone: z.string().max(191).optional(),
 });
+export const studentsSchema = z.tuple([z.coerce.number().int().positive('Invalid student id.'), z.number().int()]);
 
 export const createExamSchema = z.object({
   videolink: z.string().max(191).optional(),
   schoolid: z.coerce.number().int().positive('Invalid school id.'),
-  students: z.array(z.coerce.number().int().positive('Invalid student id.')).min(1, 'At least one student is required.'),
+  students: z.array(studentsSchema).min(1, 'At least one student is required.'),
   teacherid: z.number().int().positive('Invalid teacher id.').min(1, 'Teacher is required.'),
   juryid: z.number().int().positive('Invalid teacher id.').min(1, 'Jury is required.'),
   level: z.string().min(1, 'Level is required.'),
   date: z.string(),
-});
+}).refine(
+  (values) => {
+    values.students.forEach((student) => {
+      if (student[1] > values.students.length) {
+        return false;
+      }
+    });
+    return true;
+  },
+  {
+    message: "Student order cannot be longer than student count!",
+    path: ["students"],
+  }
+).refine(
+  (values) => {
+    for (let i = 0; i < values.students.length; i++) {
+      for (let j = i + 1; j < values.students.length; j++) {
+        if (values.students[i][1] === values.students[j][1]) {
+          return false;
+        }
+      }
+    }
+    return true;
+  },
+  {
+    message: "Any two students cannot have the same order!",
+    path: ["students"],
+  }
+);
 
 export const patchExamSchema = z.object({
-  videolink: z.string().min(1, 'Video Link is required.').max(191).optional(),
+  videolink: z.string().max(191).optional(),
   schoolid: z.coerce.number().int().positive('Invalid school id.').optional(),
-  students: z.array(z.coerce.number().int().positive('Invalid student id.')).min(1, 'At least one student is required.').optional(),
+  students: z.array(studentsSchema).min(1, 'At least one student is required.').optional(),
   teacherid: z.number().int().positive('Invalid teacher id.').min(1, 'Teacher is required.').optional(),
   juryid: z.number().int().positive('Invalid teacher id.').min(1, 'Jury is required.').optional(),
   level: z.string().min(1, 'Level is required.').optional(),
   date: z.string().optional(),
-  examid: z.coerce.number().int().positive('Invalid exam id.').min(1, 'Exam is required.'),
-});
+}).refine(
+  (values) => {
+    const students = values.students;
+    if (students == undefined) {
+      return true;
+    } else {
+      values.students?.forEach((student) => {
+        if (student[1] > students.length) {
+          return false;
+        }
+      });
+      return true;
+    }
 
-export const patchEvaluationSchema = z.object({
-  eval: z.string().optional(),
-  evalTranslation: z.string().optional(),
-  marking: z.number().optional(),
-  evalid: z.coerce.number().int().positive('Invalid evaluation id id.').min(1, 'Evaluation is required.'),
-  confirmDate: z.string().optional(),
-});
+  },
+  {
+    message: "Student order cannot be longer than student count!",
+    path: ["students"],
+  }
+).refine(
+  (values) => {
+    const students = values.students;
+    if (students == undefined) {
+      return true;
+    }
+    for (let i = 0; i < students.length; i++) {
+      for (let j = i + 1; j < students.length; j++) {
+        if (students[i][1] === students[j][1]) {
+          return false;
+        }
+      }
+    }
+    return true;
+  },
+  {
+    message: "Any two students cannot have the same order!",
+    path: ["students"],
+  }
+);
 
 export const evaluationSchema = z.object({
   studentid: z.coerce.number().int().positive('Invalid student id.').min(1, 'Student is required.'),
@@ -191,13 +249,4 @@ export const translateExamSchema = z.object({
   translations: translationSchema.array().nonempty(),
   examEvalTranslation: z.string().min(1, 'Exam Evaluation is required.'),
   examId: z.number(),
-});
-
-
-export const createEvaluationSchema = z.object({
-  eval: z.string().min(1, 'Evaluation is required.').max(250, 'Evaluation cannot be longer than 250 characters'),
-  evalTranslation: z.string().optional(),
-  marking: z.number().min(0, 'Marking cannot be negative.').max(100, 'Marking cannot be more than 100.'),
-  examid: z.coerce.number().int().positive('Invalid exam id.').min(1, 'Exam is required.'),
-  studentid: z.coerce.number().int().positive('Invalid student id.').min(1, 'Student is required.'),
 });

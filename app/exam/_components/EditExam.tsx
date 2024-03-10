@@ -6,43 +6,56 @@ import { useForm } from 'react-hook-form'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { createExamSchema } from '@/app/validationSchemas'
+import { patchExamSchema } from '@/app/validationSchemas'
 import { z } from 'zod'
 import ErrorMessage from '@/app/components/ErrorMessage'
 import Spinner from '@/app/components/Spinner'
-import { ExamLevel, Jury, Student, Teacher } from '@prisma/client'
+import { ExamLevel, Jury, Student, Teacher, Exam, ExamStudents } from '@prisma/client'
 import { LocalizationProvider, StaticDateTimePicker } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { toast } from 'react-hot-toast';
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { useSession } from 'next-auth/react'
-import { Cross2Icon } from '@radix-ui/react-icons'
+import { Cross2Icon } from '@radix-ui/react-icons';
 
-type ExamForm = z.infer<typeof createExamSchema>
+type ExamForm = z.infer<typeof patchExamSchema>
 
 interface Props {
-    params: { schoolId: string, students: Array<Student> | null, teachers: Array<Teacher> | null, juries: Array<Jury> | null }
+    params: { exam: Exam, students: Array<Student> | null, teachers: Array<Teacher> | null, juries: Array<Jury> | null, examTakers: Array<Student> | null, examTakingStudentsOrders: Array<ExamStudents> | null }
 }
 
-const NewExam = ({ params }: Props) => {
+const EditExam = ({ params }: Props) => {
     const router = useRouter();
 
     const { register, control, handleSubmit, setValue, formState: { errors } } = useForm<ExamForm>({
-        resolver: zodResolver(createExamSchema)
+        resolver: zodResolver(patchExamSchema)
     });
-    const [dateSelected, setDateSelected] = useState(false);
 
     const [error, setError] = useState('');
     const [isSubmitting, setSubmitting] = useState(false);
-    const [studentOptions, setStudentOptions] = useState(params.students?.map((student) => { return { value: student.id, label: student.name + ' ' + student.surname, isDisabled: false } }));
+    const [studentOptions, setStudentOptions] = useState(params.students?.map((student) => {
+        const isDisabled = params.examTakers?.some((examTaker) => examTaker.id === student.id) ? true : false;
+        return { value: student.id, label: student.name + ' ' + student.surname, isDisabled: isDisabled }
+    }));
 
     const [selectedStudentOptions, setSelectedStudentOptions] = useState<SingleValue<{
         value: number;
         label: string;
         isDisabled: boolean;
-    }>[]>();
+    }>[]>(params.examTakers ? params.examTakers?.map((student) => {
+        return { value: student.id, label: student.name + ' ' + student.surname, isDisabled: true }
+    }) : []);
 
-    const [selectedStudentIds, setSelectedStudentIds] = useState<[number, number][]>([]);
+    const [selectedStudentIds, setSelectedStudentIds] = useState<[number, number][]>(params.examTakingStudentsOrders ?
+        params.examTakingStudentsOrders?.map((student) => {
+            return [student.studentId, student.studentOrder]
+        }) : []);
+
+    const [currentJury, setCurrentJury] = useState(params.exam.juryId);
+    const [currentTeacher, setCurrentTeacher] = useState(params.exam.teacherId);
+    const [currentLevel, setCurrentLevel] = useState<string>(params.exam.level);
+    const [currentDate, setCurrentDate] = useState<Dayjs>(dayjs(params.exam.examDate));
+
     const { status, data: session } = useSession();
 
     const levels = Object.values(ExamLevel);
@@ -50,13 +63,17 @@ const NewExam = ({ params }: Props) => {
     const teachers = params.teachers?.map((teacher) => { return { value: teacher.id, label: teacher.name + ' ' + teacher.surname, isDisabled: false } });
     const juries = params.juries?.map((jury) => { return { value: jury.id, label: jury.name + ' ' + jury.surname, isDisabled: false } });
 
+    const defaultTeacher = teachers?.find((teacher) => teacher.value === params.exam.teacherId);
+    const defaultJury = juries?.find((jury) => jury.value === params.exam.juryId);
+
+    console.log(params.examTakingStudentsOrders)
+    console.log(selectedStudentOptions)
     const handleStudentOrderEnter = (id: number | undefined, order: number) => {
         if (id === undefined) return;
-        register('students'); // register the field
+
         setSelectedStudentIds(selectedStudentIds => {
             const deletedOldValue = selectedStudentIds.filter((student) => student[0] !== id);
             const updatedStudentIds: [number, number][] = [...deletedOldValue, [id, order]];
-            setValue('students', updatedStudentIds); // set the value
             return updatedStudentIds;
         });
         console.log(selectedStudentIds)
@@ -85,6 +102,7 @@ const NewExam = ({ params }: Props) => {
     }
 
     const handleStudentUnSelect = (studentId: number | undefined) => {
+        if (studentId === undefined) return;
         const updatedOptions = studentOptions?.map(option => {
             if (option.value === studentId) {
                 return { ...option, isDisabled: false };
@@ -98,40 +116,33 @@ const NewExam = ({ params }: Props) => {
 
         setSelectedStudentIds(selectedStudentIds => {
             const updatedStudentIds = selectedStudentIds.filter((student) => student[0] !== studentId);
+            setValue('students', updatedStudentIds); // set the value
             return updatedStudentIds;
         });
-
         console.log(selectedStudentIds)
-
-    }
-
-    const handleJurySelect = (jury: number) => {
-        register('juryid'); // register the field
-        setValue('juryid', jury); //
-    }
-
-    const handleTeacherSelect = (teacher: number) => {
-        register('teacherid'); // register the field
-        setValue('teacherid', teacher); //
-    }
-
-    const handleLevelSelect = (level: string) => {
-        register('level'); // register the field
-        setValue('level', level); //
     }
 
     const handleDateChange = (selectedDate: Dayjs | null) => {
         if (!selectedDate) return;
-        setDateSelected(true)
-        register('date'); // register the field
-        setValue('date', selectedDate.toDate().toDateString()); // set the value
+        setCurrentDate(selectedDate);
     }
     const handleRegister = () => {
         register('students');
         setValue('students', selectedStudentIds);
-        register('schoolid'); // register the field
-        setValue('schoolid', parseInt(params.schoolId)); // set the value
+        register('date');
+        setValue('date', currentDate.toDate().toDateString());
+        register('juryid');
+        setValue('juryid', currentJury);
+        register('teacherid');
+        setValue('teacherid', currentTeacher);
+        register('level');
+        setValue('level', currentLevel);
+        register('schoolid');
+        setValue('schoolid', params.exam.schoolId);
+        register('students');
+        setValue('students', selectedStudentIds);
     }
+    const [open, setOpen] = useState(false);
 
     if (status !== "authenticated" || !session || (session.user.role !== 'ADMIN' && session.user.role !== 'SCHOOL'))
         return (<div>You are not authorized for this operation!</div>)
@@ -139,19 +150,21 @@ const NewExam = ({ params }: Props) => {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
 
             <div className='max-w-l h-full'>
-                <Dialog.Root >
+                <Dialog.Root open={open} >
                     <Dialog.Trigger>
-                        <Button variant="surface" onClick={handleRegister} >Add Exam</Button>
+                        <Button onClick={() => setOpen(true)} variant="surface" >Edit Exam</Button>
                     </Dialog.Trigger>
                     <Dialog.Content>
-                        <Dialog.Title>Add Exam</Dialog.Title>
+                        <Dialog.Title>Edit Exam</Dialog.Title>
 
                         <Flex direction="column" gap="3">
                             <form className='max-w-m flex flex-col content-between gap-4' onSubmit={handleSubmit(async (data) => {
                                 try {
                                     setSubmitting(true)
-                                    const result = await axios.post('/api/exam', data);
+                                    const result = await axios.patch('/api/exam/' + params.exam.id, data);
                                     toast.success("Exam has been created successfully.", { duration: 3000, });
+                                    setOpen(false)
+                                    router.push('/exam/' + params.exam.id)
                                     router.refresh()
                                     setSubmitting(false)
                                 } catch (error) {
@@ -164,7 +177,8 @@ const NewExam = ({ params }: Props) => {
                                 {params.juries && <Select
                                     className="basic-single"
                                     classNamePrefix="select"
-                                    onChange={(selectedOption) => { if (selectedOption) handleJurySelect(selectedOption.value) }}
+                                    defaultValue={defaultJury}
+                                    onChange={(selectedOption) => { if (selectedOption) setCurrentJury(selectedOption.value) }}
                                     isSearchable={true}
                                     name="Select a jury"
                                     options={juries}
@@ -176,7 +190,8 @@ const NewExam = ({ params }: Props) => {
                                 {params.teachers && <Select
                                     className="basic-single"
                                     classNamePrefix="select"
-                                    onChange={(selectedOption) => { if (selectedOption) handleTeacherSelect(selectedOption.value) }}
+                                    defaultValue={defaultTeacher}
+                                    onChange={(selectedOption) => { if (selectedOption) setCurrentTeacher(selectedOption.value) }}
                                     isSearchable={true}
                                     name="Select a teacher"
                                     options={teachers}
@@ -187,8 +202,9 @@ const NewExam = ({ params }: Props) => {
                                 <label>Select Exam Level</label>
                                 <Select
                                     className="basic-single"
+                                    defaultValue={{ value: params.exam.level, label: params.exam.level.toString().replace('_', ' ').replace('k', '') }}
                                     classNamePrefix="select"
-                                    onChange={(selectedOption) => { if (selectedOption) handleLevelSelect(selectedOption.value) }}
+                                    onChange={(selectedOption) => { if (selectedOption) setCurrentLevel(selectedOption.value) }}
                                     isSearchable={true}
                                     name="Select exam level"
                                     options={levels.map((level) => { return { value: level, label: level.toString().replace('_', ' ').replace('k', '') } })}
@@ -197,7 +213,6 @@ const NewExam = ({ params }: Props) => {
                                     {errors.level?.message}
                                 </ErrorMessage>
                                 <label>Select Exam Taking Students</label>
-
                                 {params.students && <Select
                                     className="basic-single"
                                     classNamePrefix="select"
@@ -207,7 +222,6 @@ const NewExam = ({ params }: Props) => {
                                     options={studentOptions}
                                     placeholder="Select exam taking students"
                                 />}
-
                                 <Table.Root variant='surface'>
                                     <Table.Header>
                                         <Table.Row >
@@ -221,9 +235,14 @@ const NewExam = ({ params }: Props) => {
                                             <Table.Row key={student?.value}>
                                                 <Table.RowHeaderCell>{student?.label}</Table.RowHeaderCell>
                                                 <Table.RowHeaderCell>
-                                                    <TextField.Input required placeholder='Order' type='number' min='1' max={selectedStudentOptions.length} onChange={(input) => { handleStudentOrderEnter(student?.value, parseInt(input.target.value)) }} />
+                                                    <TextField.Input required defaultValue={params.examTakingStudentsOrders?.find(
+                                                        (order) => order.studentId === student?.value)?.studentOrder}
+                                                        placeholder='Order' type='number'
+                                                        min='1'
+                                                        // max={selectedStudentOptions.length} 
+                                                        onChange={(input) => { handleStudentOrderEnter(student?.value, parseInt(input.target.value)) }} />
                                                 </Table.RowHeaderCell>
-                                                <Table.RowHeaderCell><Cross2Icon color='red' onClick={() => handleStudentUnSelect(student?.value)} /></Table.RowHeaderCell>
+                                                <Table.RowHeaderCell><Cross2Icon onClick={() => handleStudentUnSelect(student?.value)} /></Table.RowHeaderCell>
                                             </Table.Row>
                                         ))}
                                     </Table.Body>
@@ -232,7 +251,7 @@ const NewExam = ({ params }: Props) => {
                                     {errors.students?.message}
                                 </ErrorMessage>
                                 <label>Video Link</label>
-                                <TextField.Root>
+                                <TextField.Root defaultValue={params.exam.videoLink ? params.exam.videoLink : ''}>
                                     <TextField.Input placeholder='Video link' {...register('videolink')} />
                                 </TextField.Root>
                                 <ErrorMessage>
@@ -241,18 +260,16 @@ const NewExam = ({ params }: Props) => {
                                 <label>Exam Date</label>
                                 <StaticDateTimePicker
                                     onChange={handleDateChange}
+                                    defaultValue={dayjs(params.exam.examDate)}
                                 />
-                                <ErrorMessage>
-                                    {!dateSelected && 'Date is required!'}
-                                </ErrorMessage>
                                 <Flex gap="3" justify="between">
-                                    <Button variant="surface" disabled={isSubmitting}>Add New Exam{isSubmitting && <Spinner />}</Button>
+                                    <Button variant="surface" disabled={isSubmitting} onClick={handleRegister}>Edit Exam{isSubmitting && <Spinner />}</Button>
                                 </Flex>
                             </form>
                         </Flex>
                         <Flex gap="3" justify="end">
                             <Dialog.Close>
-                                <Button variant="soft" color="gray">
+                                <Button onClick={() => setOpen(false)} variant="soft" color="gray">
                                     Close
                                 </Button>
                             </Dialog.Close>
@@ -264,4 +281,4 @@ const NewExam = ({ params }: Props) => {
     )
 }
 
-export default NewExam
+export default EditExam

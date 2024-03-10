@@ -67,10 +67,20 @@ enum AuthLevel {
 }
 
 enum ExamLevel {
-  PREP_1
-  PREP_2
-  PREP_3
-  PREP_4
+  kPREP_1A
+  kPREP_1B
+  kPREP_2A
+  kPREP_2B
+  k1A 
+  k1B
+  k2A
+  k2B
+  k3A
+  k3B
+  k4A
+  k4B 
+  k5 
+  k6
 }
 
 enum ExamStatus {
@@ -87,6 +97,7 @@ model ExamStudents {
   studentId     Int       @map("student_id")
   student       Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
   marking       Float?
+  studentOrder  Int
   eval          String?   @db.Text
   evalTranslate String?   @db.Text
   evalDate      DateTime? @default(now())
