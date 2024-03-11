@@ -31,7 +31,7 @@ const EvalExam = ({ params }: Props) => {
         setValue('examId', parseInt(params.id)); // set the value
     }, [register, setValue, params.id]);
     if (status !== "authenticated" || !session || (session.user.role !== 'ADMIN' && session.user.role !== 'JURY'))
-        return (<div>You are not authorized for this operation!</div>)
+        return (<div></div>)
 
     return (
         <div className='mb-5 flex flex-col content-between gap-4'>

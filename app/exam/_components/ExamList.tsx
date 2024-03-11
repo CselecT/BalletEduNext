@@ -14,6 +14,7 @@ const ExamList = ({ params }: Props) => {
                 <Table.Header>
                     <Table.Row>
                         <Table.ColumnHeaderCell>Exam Date</Table.ColumnHeaderCell>
+                        <Table.ColumnHeaderCell>Exam Level</Table.ColumnHeaderCell>
                         <Table.ColumnHeaderCell>Exam Status</Table.ColumnHeaderCell>
                         <Table.ColumnHeaderCell>Exam Details</Table.ColumnHeaderCell>
                     </Table.Row>
@@ -22,6 +23,7 @@ const ExamList = ({ params }: Props) => {
                     {params.exams.map((exam, index) => (
                         <Table.Row key={index}>
                             <Table.RowHeaderCell>{exam.examDate.toDateString()}</Table.RowHeaderCell>
+                            <Table.RowHeaderCell>{exam.level.toString().replaceAll('_', ' ').replace('k', '')}</Table.RowHeaderCell>
                             <Table.RowHeaderCell>{exam.status}</Table.RowHeaderCell>
                             <Table.Cell><Button variant="outline"><Link href={'/exam/' + exam.id}>Exam Details</Link></Button></Table.Cell>
                         </Table.Row>

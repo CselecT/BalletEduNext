@@ -145,7 +145,7 @@ const EditExam = ({ params }: Props) => {
     const [open, setOpen] = useState(false);
 
     if (status !== "authenticated" || !session || (session.user.role !== 'ADMIN' && session.user.role !== 'SCHOOL'))
-        return (<div>You are not authorized for this operation!</div>)
+        return (<div></div>)
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
 

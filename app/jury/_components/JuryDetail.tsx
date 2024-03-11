@@ -1,6 +1,6 @@
 import React from 'react'
 import prisma from '@/prisma/client';
-import { Avatar, Box, Button, Card,  Flex, Link, Table } from '@radix-ui/themes';
+import { Avatar, Box, Button, Card, Flex, Link, Table } from '@radix-ui/themes';
 import { ExamStatus } from '@prisma/client';
 
 interface Props {
@@ -45,6 +45,7 @@ const JuryDetail = async ({ params }: Props) => {
                 <Table.Header>
                     <Table.Row>
                         <Table.ColumnHeaderCell>Exam Date</Table.ColumnHeaderCell>
+                        <Table.ColumnHeaderCell>Exam Level</Table.ColumnHeaderCell>
                         <Table.ColumnHeaderCell>Exam Status</Table.ColumnHeaderCell>
                         <Table.ColumnHeaderCell>Exam Details</Table.ColumnHeaderCell>
                         <Table.ColumnHeaderCell>Exam Evaluation</Table.ColumnHeaderCell>
@@ -54,6 +55,7 @@ const JuryDetail = async ({ params }: Props) => {
                     {exams.map(exam => (
                         <Table.Row key={exam.id}>
                             <Table.RowHeaderCell>{exam.examDate.toDateString()}</Table.RowHeaderCell>
+                            <Table.RowHeaderCell>{exam.level.toString().replaceAll('_', ' ').replace('k', '')}</Table.RowHeaderCell>
                             <Table.RowHeaderCell>{exam.status}</Table.RowHeaderCell>
                             <Table.Cell><Button variant="surface"><Link href={'/exam/' + exam.id}>Exam Details</Link></Button></Table.Cell>
                             {<Table.Cell>
